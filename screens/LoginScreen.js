@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import { Text, View, StyleSheet, Image, TextInput, Button } from 'react-native';
 
-import Input from '../components/UI/Input';
-
 const LoginScreen = (props) => {
     const [userId, setUserId] = useState("");
     const [userPassword, setUserPassword] = useState("")
@@ -19,7 +17,7 @@ const LoginScreen = (props) => {
         <View style={styles.container}>
             <Image 
                 style={styles.logo}
-                source={require('../assets/icon.jpeg')}
+                source={require('../assets/logo.jpeg')}
             />
             <View style={styles.form}>
                 <Text style={styles.formText}>ID:</Text>
