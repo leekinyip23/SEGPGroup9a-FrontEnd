@@ -5,6 +5,7 @@ const AccountScreen = (props) => {
     return (
         <View style={styles.container}>
             <Text>Hello from Account Screen</Text>
+            <Text>Hello Aaron Chin</Text>
             <Button
                 title="Log Out"
                 onPress={() => props.navigation.navigate("LoginScreen")}
