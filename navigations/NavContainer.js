@@ -1,20 +1,27 @@
-import React, { useState } from 'react';
-import { Text, View } from 'react-native';
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
 
 
 
 import AppNavigator from './AppNavigator';
-import LoadingOverlay from '../components/LoadingOverlay/LoadingOverlay';
+import LoadingOverlay from '../components/UI/LoadingOverlay';
 
 const NavContainer = props => {
     return (
-
-        <NavigationContainer>
+        <View style={styles.container}>
             <AppNavigator/>
-            <Text>Test</Text>
-        </NavigationContainer>
+            {
+                false && <LoadingOverlay />
+            }
+        </View>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1
+    }
+})
 
 
 export default NavContainer;
