@@ -17,7 +17,7 @@ const AppNavigator = () => {
                         let iconName;
 
                         if(route.name === 'Journal') {
-                            iconName = 'ios-globe';
+                            iconName = 'ios-book';
                         } else if (route.name === 'ChatBot') {
                             iconName = 'ios-warning';
                         } else if (route.name === 'Account') {
