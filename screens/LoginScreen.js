@@ -65,7 +65,6 @@ const styles = StyleSheet.create({
         width: 70,
         marginBottom: 50,
     },
-    
 })
 
 const mapStateToProps = state => ({
