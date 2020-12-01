@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Text, View, StyleSheet, Image, Button, TextInput, TouchableOpacity, Switch } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { connect } from 'react-redux';
-import * as ACTION_TYPES from '../service/redux/action_types/reducer';
+import * as LOGIN_ACTION_TYPES from '../service/redux/action_types/login';
 
 import Login from '../components/UI/Login';
 
@@ -27,6 +27,7 @@ const LoginScreen = (props) => {
         props.onLoginClick(userId, userPassword);
         setUserId("");
         setUserPassword("");
+        
 
         props.navigation.navigate("App")
     }
@@ -137,14 +138,14 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = state => ({
-    reducer: state,
+    loginReducer: state.loginReducer,
 });
 
 
 const mapDispatchToProps = dispatch => {
     return {
         onLoginClick: (newName, newPassword) => dispatch({
-            type: ACTION_TYPES.LOGIN,
+            type: LOGIN_ACTION_TYPES.LOGIN,
             name: newName,
             password: newPassword,
         }),

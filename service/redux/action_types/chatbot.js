@@ -1,0 +1,1 @@
+export const temp1 = "TEMP1"

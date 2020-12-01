@@ -1,4 +1,4 @@
-import * as ACTION_TYPES from '../action_types/reducer';
+import * as ACTION_TYPES from '../action_types/login';
 
 const initialState = {
     name: "",
@@ -9,6 +9,7 @@ export default (state = initialState, action) => {
     switch(action.type) {
         case ACTION_TYPES.LOGIN: 
             return {
+
                 ...state,
                 name: action.name,
                 password: action.password

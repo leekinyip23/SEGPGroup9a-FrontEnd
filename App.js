@@ -2,14 +2,19 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, combineReducers } from 'redux';
 
-import MainReducer from './service/redux/reducers/reducer';
+import LoginReducer from './service/redux/reducers/login';
+import ChatbotReducer from './service/redux/reducers/chatbot';
 
-import AppNavigator from './navigations/AppNavigator';
 import NavContainer from './navigations/NavContainer';
 
-const store = createStore(MainReducer);
+const rootReducer = combineReducers({
+  loginReducer: LoginReducer,
+  chatbotReducer: ChatbotReducer,
+})
+
+const store = createStore(rootReducer);
 
 
 export default function App() {

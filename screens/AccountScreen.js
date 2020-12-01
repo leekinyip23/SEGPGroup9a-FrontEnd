@@ -3,9 +3,11 @@ import { Text, View, StyleSheet,TextInput, Button } from 'react-native'
 import Account from '../screens/Account';
 import {Picker} from '@react-native-community/picker';
 import { connect } from 'react-redux';
-import * as ACTION_TYPES from '../service/redux/action_types/reducer';
+import * as ACTION_TYPES from '../service/redux/action_types/login';
 import { Avatar, Accessory } from "react-native-elements";
 import LoginScreen from './LoginScreen';
+
+
 const AccountScreen = (props) => {
     const logOutHandler = () => {
         props.onLogOutClick();
@@ -35,6 +37,7 @@ const AccountScreen = (props) => {
     const GenderChangeHandler =(userGender) =>{
         setUserGender(userGender)
     }
+
     return (
         <View style={styles.container}> 
      
@@ -201,7 +204,7 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = state => ({
-    reducer: state,
+    loginReducer: state.loginReducer,
 });
 
 const mapDispatchToProps = dispatch => {

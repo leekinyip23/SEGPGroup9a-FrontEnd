@@ -1,0 +1,46 @@
+{
+    "journals": [
+        {
+            "journal_id": "1",
+            "mood": "happy",
+            "title": "testing title 1",
+            "body_text": "testing body 1",
+            "date": "30-11-2020"
+        },
+        {
+            "journal_id": "2",
+            "mood": "happy",
+            "title": "testing title 2",
+            "body_text": "testing body 2",
+            "date": "01-12-2020"
+        },
+        {
+            "journal_id": "3",
+            "mood": "neutral",
+            "title": "testing title 3",
+            "body_text": "testing body 3",
+            "date": "20-11-2020"
+        },
+        {
+            "journal_id": "4",
+            "mood": "neutral",
+            "title": "testing title 4",
+            "body_text": "testing body 4",
+            "date": "01-11-2020"
+        },
+        {
+            "journal_id": "5",
+            "mood": "sad",
+            "title": "testing title 5",
+            "body_text": "testing body 5",
+            "date": "10-12-2020"
+        },
+        {
+            "journal_id": "6",
+            "mood": "sad",
+            "title": "testing title 6",
+            "body_text": "testing body 6",
+            "date": "21-12-2020"
+        }
+    ]
+}
