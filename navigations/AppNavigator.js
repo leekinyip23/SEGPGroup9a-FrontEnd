@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 
 import LoginScreen from '../screens/LoginScreen';
-import JournalScreen from '../screens/JournalScreen';
+import JournalStack from '../screens/JournalScreen/JournalStack';
 import ChatBotScreen from '../screens/ChatBotScreen';
 import AccountScreen from '../screens/AccountScreen';
 
@@ -33,7 +33,7 @@ const AppNavigator = () => {
             >
                 <AppTab.Screen 
                     name="Journal"
-                    component={JournalScreen}
+                    component={JournalStack}
                 />
                 <AppTab.Screen 
                     name="ChatBot"

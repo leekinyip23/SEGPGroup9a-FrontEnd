@@ -6,12 +6,14 @@ import { createStore, combineReducers } from 'redux';
 
 import LoginReducer from './service/redux/reducers/login';
 import ChatbotReducer from './service/redux/reducers/chatbot';
+import JournalReducer from './service/redux/reducers/journal';
 
 import NavContainer from './navigations/NavContainer';
 
 const rootReducer = combineReducers({
   loginReducer: LoginReducer,
   chatbotReducer: ChatbotReducer,
+  journalReducer: JournalReducer,
 })
 
 const store = createStore(rootReducer);

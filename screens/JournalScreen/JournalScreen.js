@@ -1,12 +1,18 @@
-import React, { useEffect, useState } from 'react'
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native'
+import React, { useEffect, useState } from 'react';
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 
-import Journal from '../components/JournalScreen/Journal';
 
-const DUMMY_DATA = require("../dummy_data/dummy_data.json");
+import { connect } from 'react-redux';
+import * as ACTION_TYPES from '../../service/redux/action_types/journal';
+
+import Journal from '../../components/JournalScreen/Journal';
+
+
+const DUMMY_DATA = require("../../dummy_data/dummy_data.json");
+
 
 const JournalScreen = (props) => {
-    const [journalData, setJournalData] = useState(DUMMY_DATA);
+    const [journals, setJournals] = useState(DUMMY_DATA.journals);
 
     //For when API is avaible
 
@@ -20,20 +26,31 @@ const JournalScreen = (props) => {
     //     })
     // }, [])
 
-    const journalPressHandler = (id) => {
-        console.log(id);
+    useEffect(() => {
+        props.onSaveJournal(journals)
+    }, [])
+
+    useEffect(() => {
+        setJournals(props.journalReducer.journals)
+    }, [props.journalReducer])
+
+    const journalPressHandler = (journal) => {
+        props.navigation.navigate("JournalDetail", {
+            journal: journal,
+
+        })
     }
 
 
     return (
         <View style={styles.container}>
             <View style={styles.itemContainer}>
-                {journalData.journals && journalData.journals.map(journal => {
+                {journals && journals.map(journal => {
                     return (
                         <TouchableOpacity 
                             key={journal.journal_id}
                             style={styles.journalContainer}
-                            onPress={() => {journalPressHandler(journal.journal_id)}}
+                            onPress={() => {journalPressHandler(journal)}}
                         >
                             <Journal 
                                 date={journal.date}
@@ -47,7 +64,6 @@ const JournalScreen = (props) => {
         </View>
     )
 }
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -72,4 +88,19 @@ const styles = StyleSheet.create({
     },
 })
 
-export default JournalScreen;
+const mapStateToProps = state => ({
+    journalReducer: state.journalReducer,
+});
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onSaveJournal: (newJournalData) => dispatch({
+            type: ACTION_TYPES.SAVE_JOURNAL,
+            newJournals: newJournalData,
+        }),
+        dispatch,
+    }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(JournalScreen);

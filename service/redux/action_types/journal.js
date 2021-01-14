@@ -1,0 +1,2 @@
+export const SAVE_JOURNAL = "SAVE_JOURNAL";
+export const UPDATE_JOURNAL = "UPDATE_JOURNAL";
