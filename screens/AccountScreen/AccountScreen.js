@@ -3,7 +3,7 @@ import { Text,View, StyleSheet, TouchableOpacity,Button } from 'react-native';
 import { Avatar, Accessory } from "react-native-elements";
 
 import { connect } from 'react-redux';
-import * as ACTION_TYPES from '../../service/redux/action_types/Account';
+import * as ACTION_TYPES from '../../service/redux/action_types/account';
 
 import Account from '../../components/AccountScreen/Account';
 
