@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Text, View, StyleSheet } from 'react-native'
+import React, { useState, useRef } from 'react'
+import { Text, View, SafeAreaView, StyleSheet, ScrollView, _ScrollView } from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import MessageBubble from '../components/UI/MessageBubble'
 
@@ -10,37 +10,49 @@ const ChatBotScreen = (props) => {
     const [state, setState] = useState(Number)
 
     const AddView = () => {
-        setMessage()
-        setState(Math.floor(Math.random() * 10) + 1)
-        console.log(state)
-        chatHistory.push({ isOwnMessage: true, message: message })
-
-        if (state == 1) {
-            chatHistory.push({ isOwnMessage: false, message: 'Hello' })
-        } else if (state == 2) {
-            chatHistory.push({ isOwnMessage: false, message: 'How is your day ?' })
-        } else if (state == 3) {
-            chatHistory.push({ isOwnMessage: false, message: 'Nice to meet you' })
-        } else if (state == 4) {
-            chatHistory.push({ isOwnMessage: false, message: 'My name is Teemo' })
-        } else if (state == 5) {
-            chatHistory.push({ isOwnMessage: false, message: 'Whatups' })
+        if (message == undefined) {
+            console.log("Please Enter A Valid Message")
         } else {
-            chatHistory.push({ isOwnMessage: false, message: 'Have a nice day' })
+            setMessage()
+            setState(Math.floor(Math.random() * 10) + 1)
+            console.log(state)
+            chatHistory.push({ isOwnMessage: true, message: message })
+
+            if (state == 1) {
+                chatHistory.push({ isOwnMessage: false, message: 'Hello' })
+            } else if (state == 2) {
+                chatHistory.push({ isOwnMessage: false, message: 'How is your day ?' })
+            } else if (state == 3) {
+                chatHistory.push({ isOwnMessage: false, message: 'Nice to meet you' })
+            } else if (state == 4) {
+                chatHistory.push({ isOwnMessage: false, message: 'My name is Teemo' })
+            } else if (state == 5) {
+                chatHistory.push({ isOwnMessage: false, message: 'Whatups' })
+            } else {
+                chatHistory.push({ isOwnMessage: false, message: 'Have a nice day' })
+            }
+            console.log(chatHistory);
         }
-        console.log(chatHistory);
     }
 
     const MessageHandler = (msg) => {
         setMessage(msg)
     }
 
-    return (
-        <View behavior="padding" style={styles.container}>
+    const ScrollToBottom = () => {
+        setTimeout(() => {
+        })
+    }
 
-            <View>
+    const scrollViewRef = useRef();
+
+    return (
+        <SafeAreaView behavior="padding" style={styles.container}>
+
+            <ScrollView ref={scrollViewRef}
+                onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}>
                 {chatHistory.map((m, i) => <MessageBubble {...m} key={i} />)}
-            </View>
+            </ScrollView>
 
             <View style={styles.messageBoxContainer}>
                 <TextInput style={styles.messageBox}
@@ -51,7 +63,7 @@ const ChatBotScreen = (props) => {
                     <Text style={styles.sendButton}>Send</Text>
                 </TouchableOpacity>
             </View>
-        </View >
+        </SafeAreaView >
     )
 }
 
