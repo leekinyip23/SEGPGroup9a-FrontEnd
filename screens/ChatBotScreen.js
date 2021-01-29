@@ -3,6 +3,7 @@ import { Text, View, SafeAreaView, StyleSheet, ScrollView, _ScrollView } from 'r
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import MessageBubble from '../components/UI/MessageBubble'
 import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const ChatBotScreen = (props) => {
 
@@ -40,20 +41,17 @@ const ChatBotScreen = (props) => {
         setMessage(msg)
     }
 
-    const ScrollToBottom = () => {
-        setTimeout(() => {
-        })
-    }
-
     const scrollViewRef = useRef();
 
     return (
         <SafeAreaView behavior="padding" style={styles.container}>
+            <LinearGradient colors={['#2974FA', '#38ABFD', '#43D4FF']} style={styles.gradient}>
 
-            <ScrollView ref={scrollViewRef}
-                onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}>
-                {chatHistory.map((m, i) => <MessageBubble {...m} key={i} />)}
-            </ScrollView>
+                <ScrollView ref={scrollViewRef}
+                    onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}>
+                    {chatHistory.map((m, i) => <MessageBubble {...m} key={i} />)}
+                </ScrollView>
+            </LinearGradient>
 
             <View style={styles.messageBoxContainer}>
                 <TextInput style={styles.messageBox}
@@ -99,12 +97,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 5,
     },
 
-    sendButton: {
-        color: 'blue',
-        marginLeft: 10,
-        marginRight: 5,
-        fontSize: 16,
-        fontWeight: '500',
+    gradient: {
+        flex: 1,
     },
 })
 
