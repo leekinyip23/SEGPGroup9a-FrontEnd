@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react'
 import { Text, View, SafeAreaView, StyleSheet, ScrollView, _ScrollView } from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import MessageBubble from '../components/UI/MessageBubble'
+import { Feather } from '@expo/vector-icons';
 
 const ChatBotScreen = (props) => {
 
@@ -60,7 +61,7 @@ const ChatBotScreen = (props) => {
                     onChangeText={MessageHandler} />
 
                 <TouchableOpacity onPress={() => { AddView() }}>
-                    <Text style={styles.sendButton}>Send</Text>
+                    <Feather name="send" size={25} color="blue" />
                 </TouchableOpacity>
             </View>
         </SafeAreaView >
