@@ -58,8 +58,8 @@ const ChatBotScreen = (props) => {
             <View style={styles.messageBoxContainer}>
                 <TextInput style={styles.messageBox} value={inputMessage} onChangeText={MessageHandler} />
 
-                <TouchableOpacity onPress={() => { AddChat() }}>
-                    <Feather name="send" size={25} color="blue" />
+                <TouchableOpacity onPress={() => { AddChat() }} style={styles.sendContainer}>
+                    <Feather name="send" size={35} color="blue" />
                 </TouchableOpacity>
             </View>
         </SafeAreaView >
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
         borderTopColor: '#cccccc',
         backgroundColor: '#eeeeee',
         paddingVertical: 5,
-        paddingHorizontal: 10,
+        paddingHorizontal: 15,
     },
 
     messageBox: {
@@ -92,13 +92,17 @@ const styles = StyleSheet.create({
         height: 40,
         borderWidth: 1,
         borderRadius: 10,
-        borderColor: '#dddddd',
         backgroundColor: '#ffffff',
         paddingHorizontal: 5,
     },
 
     backgroundColour: {
         flex: 1,
+    },
+
+    sendContainer: {
+        flex: 1,
+        padding: 1,
     },
 })
 
