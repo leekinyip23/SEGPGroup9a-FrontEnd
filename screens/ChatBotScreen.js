@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { Text, View, SafeAreaView, StyleSheet, ScrollView, _ScrollView } from 'react-native'
+import { View, SafeAreaView, StyleSheet, ScrollView, _ScrollView } from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import MessageBubble from '../components/UI/MessageBubble'
 import { Feather } from '@expo/vector-icons';
@@ -7,46 +7,48 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 const ChatBotScreen = (props) => {
 
-    const [message, setMessage] = useState('')
+    const [inputMessage, setInputMessage] = useState('')
     const [chatHistory, setChatHistory] = useState([])
-    const [state, setState] = useState(Number)
+    const [reply, setReply] = useState(Number)
 
-    const AddView = () => {
-        if (message == undefined) {
+    const scrollViewRef = useRef();
+
+    const MessageHandler = (msg) => {
+        setInputMessage(msg)
+    }
+
+    const AddChat = () => {
+        if (inputMessage == undefined || inputMessage == "") {
             console.log("Please Enter A Valid Message")
         } else {
-            setMessage()
-            setState(Math.floor(Math.random() * 10) + 1)
-            console.log(state)
-            chatHistory.push({ isOwnMessage: true, message: message })
+            setInputMessage()
+            setReply(Math.floor(Math.random() * 10) + 1)
 
-            if (state == 1) {
+            chatHistory.push({ isOwnMessage: true, message: inputMessage })
+
+            if (reply == 1) {
                 chatHistory.push({ isOwnMessage: false, message: 'Hello' })
-            } else if (state == 2) {
+            } else if (reply == 2) {
                 chatHistory.push({ isOwnMessage: false, message: 'How is your day ?' })
-            } else if (state == 3) {
+            } else if (reply == 3) {
                 chatHistory.push({ isOwnMessage: false, message: 'Nice to meet you' })
-            } else if (state == 4) {
+            } else if (reply == 4) {
                 chatHistory.push({ isOwnMessage: false, message: 'My name is Teemo' })
-            } else if (state == 5) {
+            } else if (reply == 5) {
                 chatHistory.push({ isOwnMessage: false, message: 'Whatups' })
             } else {
                 chatHistory.push({ isOwnMessage: false, message: 'Have a nice day' })
             }
-            console.log(chatHistory);
+
+            // Printing out input message by user
+            console.log(inputMessage)
         }
     }
 
-    const MessageHandler = (msg) => {
-        setMessage(msg)
-    }
-
-    const scrollViewRef = useRef();
-
     return (
         <SafeAreaView behavior="padding" style={styles.container}>
-            <LinearGradient colors={['#2974FA', '#38ABFD', '#43D4FF']} style={styles.gradient}>
 
+            <LinearGradient colors={['#2974FA', '#38ABFD', '#43D4FF']} style={styles.backgroundColour}>
                 <ScrollView ref={scrollViewRef}
                     onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}>
                     {chatHistory.map((m, i) => <MessageBubble {...m} key={i} />)}
@@ -54,11 +56,9 @@ const ChatBotScreen = (props) => {
             </LinearGradient>
 
             <View style={styles.messageBoxContainer}>
-                <TextInput style={styles.messageBox}
-                    value={message}
-                    onChangeText={MessageHandler} />
+                <TextInput style={styles.messageBox} value={inputMessage} onChangeText={MessageHandler} />
 
-                <TouchableOpacity onPress={() => { AddView() }}>
+                <TouchableOpacity onPress={() => { AddChat() }}>
                     <Feather name="send" size={25} color="blue" />
                 </TouchableOpacity>
             </View>
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 5,
     },
 
-    gradient: {
+    backgroundColour: {
         flex: 1,
     },
 })
