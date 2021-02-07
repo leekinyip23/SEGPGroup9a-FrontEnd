@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "mental-health-care-chatbo-rqfi",
+  "private_key_id": "e3c6ef10a30ca79671f9bbd33f1c347165379394",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDFUTuceBrUiUBv\n/RUsrA+FeJx+F0nT1EiehbtuM2G3H73fcDizGnBg4u/SCvAHFU4iG84/54l5D6Vv\nZMf/HpDwmRS4b8ofB8QcHoaw4QoAWN6pLIyVjtmmeNvyRtoqSbSIF4+pB1KeYsIb\nscExgMx8GIOwbBJzAZLGMebadd339Jnhnh5JIFv3RynUYcsAXzkSkygfBBTDz5WH\ndA6XcbDLSej6oa2wmEiij5mQFQL8NoI1Pt1pd2oNoMpk0BGqm4156jdeQJtvTeLy\nU2ZLyl7DumNEpeHTN5WWdlzkojCi6dwKWgZBXP75iq0voz7Y5rSmJl2g/Ri/Q3rc\nbqdt49BJAgMBAAECggEAFGB/N3lvy+MgtG/+b86VC8OY5ayiAy45EaXd5VOJE9BD\nW3/LWzOvx1GoUpiukQyyNPOKKS9QEyB6hTZzMPWHIlGswh9JUEsNBZphboLO9Zo3\n5GClZAyMjZSNokeO4C8cZbGJNHt9HL42LYX93Y7fjzE46E9A2H+hGLaukID7m0+I\n2WiiV10OZaibzedAXRgSxkR/3s22ISqA4mDI2kr2+vT6vr/tw7UMIcpiGmIT7Ymd\nOXjDwc7vYfWov2sp3SZ1JM0VLSgiQ7uV/YvH5j2VxSAHJifsIjUqzGEtR+yr1m1a\n82Qzr7z2RBiTvR71K18IoH4TCoTDc6IGsoTBCwH9wQKBgQDsjOd2OcJYQRRKKzS6\nu5sx2t/w8JLrjvmTqDABy2URcaO7g5MwQbK9VlOkoqUU0ZEycZ/c7PhDpiiDwVI8\n0+SPZO8oKm1YOrvG2q7rm9yoixAZ3Wqz34wMdF0qH7pfy8Nn2H15asciQJEBCag+\nEnVy6fPuN+J8wIVVh3ipNUJCqwKBgQDVioUw1eVcktUDHxMa/3QlilZjPHQAGF4Z\nl8n608XECyA2ZurqO1kkwptuZIDwmhh/dVLZ9W9ep24wDdvkQm2tKhQZtXCi+8Ne\nUay+/5uOLPJyUrCAey+VLb/eTU3z0yvZPC6W+kSJxR+A9qw9goA8Tmb0OtA/FO2Q\n4r/+1d5Y2wKBgQCBkxF67lqps0Rk+FPS8c8qOQWwWmdwRwopOtjJMtvy+TfCEGnA\n5kv9cNsydLFOvRj288yo3NmFXPAWdAATN9KcRaLHcq4gxVN0svdcMi1l2X8BXAsF\n6q8xZ1BdMbIKpXgtWyYoKzhXZ9zGH78b+UqCnuqyk8Qpp9+hoSqULYtVLwKBgAak\ny6YMUZmCu/vf4KFLZ1qvpiZqQBWsrGjRbyhNpG6IBhWLOC3XcNuS7nEN0XEq6i41\nAUHkv/VK8kOuerPsWSs1DvEJ0xpPCPILSnuaykUvIs/pwLIOoxlaFgkdkJpQbKHS\nnIR3/t/mcSd7BTrYr5KwwcVBey8rQITseRq9nrBXAoGBAMamBD9NanXIEPX5GsMc\n5br2FUIy55z34zhL79iyPbOvZpcI3BudD2On7RCoA/OL7VmVXtSydX8m5Nvwclxr\n9iHC5vP7UyPZ31U42JluxeutEzpmCCVgeYJDk7NF9a9aVRq3oat3HAfZsHvg21pI\nfsBOjkBV3GMjZ94rrRmcdbD1\n-----END PRIVATE KEY-----\n",
+  "client_email": "mental-health-care-chatbot@mental-health-care-chatbo-rqfi.iam.gserviceaccount.com",
+  "client_id": "115149177217994625029",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/mental-health-care-chatbot%40mental-health-care-chatbo-rqfi.iam.gserviceaccount.com"
+}
