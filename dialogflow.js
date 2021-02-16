@@ -1,13 +1,55 @@
 const dialogflow = require('@google-cloud/dialogflow');
+const request = require('express');
 const uuid = require('uuid');
+const express = require('express');
+const bodyParser = require('body-parser')
+const app = express()
+const port = 5000
+
+// A unique identifier for the given session
+const sessionId = uuid.v4();
+
+app.use(bodyParser.urlencoded({
+    extended: false
+}))
+
+app.use(function (req, res, next) {
+
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+
+    // Pass to next layer of middleware
+    next();
+});
+
+url = localhost:5000
+
+
+
+fetch("url" ++ "/send-msg", {
+    method: post,
+    body: "testing"
+})
+
+app.post('/send-msg', (req, res) => {
+    req.body //testing
+
+
+    runSample(res.body.inputMessage).then(data => {
+        res.send({ Reply: data })
+    })
+})
+app.post('/update-journal', (req, res) => {
+
+})
 
 /**
  * Send a query to the dialogflow agent, and return the query result.
  * @param {string} projectId The project to be used
  */
-async function runSample(projectId = 'mental-health-care-chatbo-rqfi') {
-    // A unique identifier for the given session
-    const sessionId = uuid.v4();
+async function runSample(inputMessage, projectId = 'mental-health-care-chatbo-rqfi') {
 
     // Create a new session
     const sessionClient = new dialogflow.SessionsClient({
@@ -21,7 +63,7 @@ async function runSample(projectId = 'mental-health-care-chatbo-rqfi') {
         queryInput: {
             text: {
                 // The query to send to the dialogflow agent
-                text: 'i am happy',
+                text: inputMessage,
                 // The language used by the client (en-US)
                 languageCode: 'en-US',
             },
@@ -39,6 +81,13 @@ async function runSample(projectId = 'mental-health-care-chatbo-rqfi') {
     } else {
         console.log(`  No intent matched.`);
     }
+
+    return result.fulfillmentText;
 }
 
 runSample()
+/*
+app.listen(port, () => {
+    console.log("running on port " + port)
+})
+*/
