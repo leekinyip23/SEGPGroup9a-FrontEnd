@@ -17,6 +17,32 @@ const ChatBotScreen = (props) => {
 
     const scrollViewRef = useRef();
 
+    const fetchmsg = () => {
+
+        var url = 'https://dialogflow.googleapis.com/v2/projects/mental-health-care-chatbo-rqfi/agent';
+
+        const data = new URLSearchParams();
+        for (const pair of new FormData(inputMessage)) {
+            data.append(pair[0], pair[1]);
+            console.log(pair)
+        }
+
+        console.log("abc", data)
+        fetch(url, {
+            method: 'POST',
+            body: data
+        }).then(res => res.json())
+            .then(response => {
+                console.log(response);
+                chatHistory.push({ isOwnMessage: false, message: response.message })
+
+
+            })
+            .catch(error => console.error('Error h:', error));
+
+    }
+
+
     const MessageHandler = (msg) => {
         setInputMessage(msg)
     }
@@ -26,6 +52,7 @@ const ChatBotScreen = (props) => {
             console.log("Please Enter A Valid Message")
         } else {
             setInputMessage()
+            fetchmsg()
             setReply(Math.floor(Math.random() * 10) + 1)
 
             chatHistory.push({ isOwnMessage: true, message: inputMessage })
