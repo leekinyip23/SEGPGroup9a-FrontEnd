@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 
 
 import { connect } from 'react-redux';
@@ -43,7 +43,9 @@ const JournalScreen = (props) => {
 
 
     return (
+        <ScrollView>
         <View style={styles.container}>
+            
             <View style={styles.itemContainer}>
                 {journals && journals.map(journal => {
                     return (
@@ -62,6 +64,7 @@ const JournalScreen = (props) => {
                 })}
             </View>
         </View>
+        </ScrollView>
     )
 }
 const styles = StyleSheet.create({

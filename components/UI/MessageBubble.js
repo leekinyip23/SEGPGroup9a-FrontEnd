@@ -10,11 +10,6 @@ const MessageBubble = (props) => (
     </View>
 )
 
-MessageBubble.PropTypes = {
-    message: PropTypes.string.isRequired,
-    isOwnMessage: PropTypes.bool.isRequired,
-}
-
 const style = StyleSheet.create({
     bubble: {
         width: 250,

@@ -1,1 +1,1 @@
-export const temp1 = "TEMP1"
+export const UPDATE_CHATHISTORY = "UPDATE_CHATHISTORY";

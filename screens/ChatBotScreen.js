@@ -3,17 +3,21 @@ import { Text, View, StyleSheet } from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import MessageBubble from '../components/UI/MessageBubble'
 
+
+import { connect } from 'react-redux';
+import * as ACTION_TYPES from '../service/redux/action_types/chatbot';
+
 const ChatBotScreen = (props) => {
 
     const [message, setMessage] = useState('')
     const [chatHistory, setChatHistory] = useState([])
-    const [state, setState] = useState(Number)
+    const [state, setState] = useState(1)
 
     const AddView = () => {
-        setMessage()
-        setState(Math.floor(Math.random() * 10) + 1)
+        setState(Math.floor(Math.random()*10%6))
         console.log(state)
         chatHistory.push({ isOwnMessage: true, message: message })
+        setMessage('');
 
         if (state == 1) {
             chatHistory.push({ isOwnMessage: false, message: 'Hello' })
@@ -45,8 +49,8 @@ const ChatBotScreen = (props) => {
             <View style={styles.messageBoxContainer}>
                 <TextInput style={styles.messageBox}
                     value={message}
-                    onChangeText={MessageHandler} />
-
+                    onChangeText={MessageHandler} 
+                />
                 <TouchableOpacity onPress={() => { AddView() }}>
                     <Text style={styles.sendButton}>Send</Text>
                 </TouchableOpacity>
@@ -58,7 +62,7 @@ const ChatBotScreen = (props) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#87cefa',
         justifyContent: 'flex-end',
     },
 
@@ -96,7 +100,14 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = state => ({
-    reducer: state.chatHistory,
-});
+    chatBotReducer: state.chatbotReducer
+})
 
-export default ChatBotScreen;
+const mapDispatchToProps = dispatch => {
+    return {
+
+    }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChatBotScreen);

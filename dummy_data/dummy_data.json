@@ -41,6 +41,34 @@
             "title": "testing title 6",
             "body_text": "testing body 6",
             "date": "21-12-2020"
+        },
+        {
+            "journal_id": "7",
+            "mood": "sad",
+            "title": "testing title 7",
+            "body_text": "testing body 7",
+            "date": "21-12-2020"
+        },
+        {
+            "journal_id": "8",
+            "mood": "sad",
+            "title": "testing title 8",
+            "body_text": "testing body 8",
+            "date": "21-12-2020"
+        },
+        {
+            "journal_id": "9",
+            "mood": "sad",
+            "title": "testing title 9",
+            "body_text": "testing body 9",
+            "date": "21-12-2020"
+        },
+        {
+            "journal_id": "10",
+            "mood": "sad",
+            "title": "testing title 10",
+            "body_text": "testing body 10",
+            "date": "21-12-2020"
         }
     ]
 }
