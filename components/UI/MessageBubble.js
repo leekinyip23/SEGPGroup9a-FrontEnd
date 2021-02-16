@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import propTypes from 'prop-types'
 import { View, Text, StyleSheet } from 'react-native'
 
 const MessageBubble = (props) => (
@@ -10,6 +10,14 @@ const MessageBubble = (props) => (
     </View>
 )
 
+<<<<<<< HEAD
+=======
+MessageBubble.propTypes = {
+    message: propTypes.string.isRequired,
+    isOwnMessage: propTypes.bool.isRequired,
+}
+
+>>>>>>> e8668914e0d718d1555f37372fdbbb2817c89c3f
 const style = StyleSheet.create({
     bubble: {
         width: 250,
