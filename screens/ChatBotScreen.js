@@ -19,63 +19,76 @@ const ChatBotScreen = (props) => {
 
     const fetchmsg = () => {
 
-        var url = 'https://dialogflow.googleapis.com/v2/projects/mental-health-care-chatbo-rqfi/agent';
+        var url = '/send-msg';
+        var response;
 
-        const data = new URLSearchParams();
-        for (const pair of new FormData(inputMessage)) {
-            data.append(pair[0], pair[1]);
-            console.log(pair)
-        }
-
-        console.log("abc", data)
-        fetch(url, {
+        fetch('http://192.168.68.151:5000/send-msg', {
             method: 'POST',
-            body: data
-        }).then(res => res.json())
-            .then(response => {
-                console.log(response);
-                chatHistory.push({ isOwnMessage: false, message: response.message })
-
-
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "text": `${inputMessage}`
             })
-            .catch(error => console.error('Error h:', error));
+        })
+        .then(res=>{
+            return res.json();
+        })
+        .then(data => {
+            chatHistory.push({ isOwnMessage: false, message: data.message })
+        })
 
+        setInputMessage("")
     }
 
+    // const fetchmsg = async e => {
+    //     const response = await fetch('/send-msg', {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //       },
+    //       body: JSON.stringify({ 
+    //           "text": `${inputMessage}`
+    //         }),
+    //     });
+    //     const body = await response.text();
+        
+    //     chatHistory.push({ isOwnMessage: false, message: response })
+    // };
 
     const MessageHandler = (msg) => {
         setInputMessage(msg)
     }
-
-    const AddChat = () => {
-        if (inputMessage == undefined || inputMessage == "") {
-            console.log("Please Enter A Valid Message")
-        } else {
-            setInputMessage()
-            fetchmsg()
-            setReply(Math.floor(Math.random() * 10) + 1)
-
-            chatHistory.push({ isOwnMessage: true, message: inputMessage })
-
-            if (reply == 1) {
-                chatHistory.push({ isOwnMessage: false, message: 'Hello' })
-            } else if (reply == 2) {
-                chatHistory.push({ isOwnMessage: false, message: 'How is your day ?' })
-            } else if (reply == 3) {
-                chatHistory.push({ isOwnMessage: false, message: 'Nice to meet you' })
-            } else if (reply == 4) {
-                chatHistory.push({ isOwnMessage: false, message: 'My name is Teemo' })
-            } else if (reply == 5) {
-                chatHistory.push({ isOwnMessage: false, message: 'Whatups' })
+    /*
+        const AddChat = () => {
+            if (inputMessage == undefined || inputMessage == "") {
+                console.log("Please Enter A Valid Message")
             } else {
-                chatHistory.push({ isOwnMessage: false, message: 'Have a nice day' })
+                setInputMessage()
+                //fetchmsg()
+                setReply(Math.floor(Math.random() * 10) + 1)
+    
+                chatHistory.push({ isOwnMessage: true, message: inputMessage })
+    
+                if (reply == 1) {
+                    chatHistory.push({ isOwnMessage: false, message: 'Hello' })
+                } else if (reply == 2) {
+                    chatHistory.push({ isOwnMessage: false, message: 'How is your day ?' })
+                } else if (reply == 3) {
+                    chatHistory.push({ isOwnMessage: false, message: 'Nice to meet you' })
+                } else if (reply == 4) {
+                    chatHistory.push({ isOwnMessage: false, message: 'My name is Teemo' })
+                } else if (reply == 5) {
+                    chatHistory.push({ isOwnMessage: false, message: 'Whatups' })
+                } else {
+                    chatHistory.push({ isOwnMessage: false, message: 'Have a nice day' })
+                }
+    
+                // Printing out input message by user
+                console.log(inputMessage)
             }
-
-            // Printing out input message by user
-            console.log(inputMessage)
         }
-    }
-
+    */
     return (
         <SafeAreaView behavior="padding" style={styles.container}>
 
@@ -87,9 +100,9 @@ const ChatBotScreen = (props) => {
             </LinearGradient>
 
             <View style={styles.messageBoxContainer}>
-                <TextInput style={styles.messageBox} value={inputMessage} onChangeText={MessageHandler} />
+                <TextInput id="MSG" name="MSG" style={styles.messageBox} value={inputMessage} onChangeText={MessageHandler} />
 
-                <TouchableOpacity onPress={() => { AddChat() }} style={styles.sendContainer}>
+                <TouchableOpacity onPress={() => { fetchmsg() }} style={styles.sendContainer}>
                     <Feather name="send" size={35} color="blue" />
                 </TouchableOpacity>
             </View>
