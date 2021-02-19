@@ -17,7 +17,14 @@ const ChatBotScreen = (props) => {
 
     const scrollViewRef = useRef();
 
+    let isSaveJournalNext = false
+
     const fetchmsg = () => {
+        if(isSaveJournalNext) {
+            dispatch(onSaveJournal(inputMessage))
+
+            isSaveJournalNext = false;
+        }
 
         var url = '/send-msg';
         var response;
@@ -35,7 +42,12 @@ const ChatBotScreen = (props) => {
             return res.json();
         })
         .then(data => {
+            console.log(data)
+            if(data.isSaveJournal) {
+                isSaveJournalNext = true;
+            }
             chatHistory.push({ isOwnMessage: false, message: data.message })
+
         })
 
         setInputMessage("")

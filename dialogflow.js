@@ -25,15 +25,28 @@ app.use(function (req, res, next) {
     next();
 });
 
+let isSaveJournal = false;
+
 app.post('/send-msg', (req, res) => {
     runSample(req.body.text).then(data => {
+        if(isSaveJournal) {
+            functionToSaveToMongoDB(req.body.message)
+
+            isSaveJournal = false;
+        }
+
+        if(data.intent === "Negative-wfqefwe") {
+            isSaveJournal = true;
+        }
+
+
         res.send({
-            message: data
+            message: data.fulfillmentMessages,
+            isSaveJournal: isSaveJournal,
         })
         // res.json({
         //     "message": `${data}`
         // })
-
     })
 })
 
@@ -84,7 +97,7 @@ async function runSample(msg, projectId = 'mental-health-care-chatbo-rqfi') {
         console.log(`  No intent matched.`);
     }
 
-    return result.fulfillmentText;
+    return result;
 }
 
 
