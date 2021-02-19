@@ -24,14 +24,6 @@ app.use(function (req, res, next) {
     next();
 });
 
-url = localhost:5000
-
-
-
-fetch("url" ++ "/send-msg", {
-    method: post,
-    body: "testing"
-})
 
 app.post('/send-msg', (req, res) => {
     req.body //testing
