@@ -1,5 +1,4 @@
 const dialogflow = require('@google-cloud/dialogflow');
-const request = require('express');
 const uuid = require('uuid');
 const express = require('express');
 const bodyParser = require('body-parser')
@@ -24,32 +23,24 @@ app.use(function (req, res, next) {
     next();
 });
 
-url = localhost:5000
-
-
-
-fetch("url" ++ "/send-msg", {
-    method: post,
-    body: "testing"
-})
-
 app.post('/send-msg', (req, res) => {
-    req.body //testing
-
-
-    runSample(res.body.inputMessage).then(data => {
-        res.send({ Reply: data })
+    console.log("checkpoint")
+    runSample(req.body.text).then(data => {
+        res.send(data)
+        console.log(data)
     })
 })
-app.post('/update-journal', (req, res) => {
 
+app.get('/', (req, res) => {
+    res.send("HELLO")
+    console.log("Hello")
 })
 
 /**
  * Send a query to the dialogflow agent, and return the query result.
  * @param {string} projectId The project to be used
  */
-async function runSample(inputMessage, projectId = 'mental-health-care-chatbo-rqfi') {
+async function runSample(msg, projectId = 'mental-health-care-chatbo-rqfi') {
 
     // Create a new session
     const sessionClient = new dialogflow.SessionsClient({
@@ -63,10 +54,15 @@ async function runSample(inputMessage, projectId = 'mental-health-care-chatbo-rq
         queryInput: {
             text: {
                 // The query to send to the dialogflow agent
-                text: inputMessage,
+                text: msg,
                 // The language used by the client (en-US)
                 languageCode: 'en-US',
             },
+            /*
+                        event: {
+                            name: "GG",
+                            languageCode: 'en-US'
+                        },*/
         },
     };
 
@@ -85,9 +81,7 @@ async function runSample(inputMessage, projectId = 'mental-health-care-chatbo-rq
     return result.fulfillmentText;
 }
 
-runSample()
-/*
+
 app.listen(port, () => {
     console.log("running on port " + port)
 })
-*/
