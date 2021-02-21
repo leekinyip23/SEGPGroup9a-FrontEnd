@@ -1,56 +1,156 @@
 import React, { useState, useRef } from 'react'
-import { View, SafeAreaView, StyleSheet, ScrollView, _ScrollView } from 'react-native'
+import { View, StyleSheet, ScrollView, _ScrollView } from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import MessageBubble from '../components/UI/MessageBubble'
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
-
-import { connect } from 'react-redux';
+import { connect, useStore } from 'react-redux';
 import * as ACTION_TYPES from '../service/redux/action_types/chatbot';
 
 const ChatBotScreen = (props) => {
 
+    const scrollViewRef = useRef();
     const [inputMessage, setInputMessage] = useState('')
     const [chatHistory, setChatHistory] = useState([])
-    const [reply, setReply] = useState(Number)
-
-    const scrollViewRef = useRef();
-
-    let isSaveJournalNext = false
+    const [reply, setReply] = useState('')
+    const [isSaveJournalNext, setIsSaveJournalNext] = useState(false)
+    // 0 --> neutral
+    // 1 --> positive
+    // 2 --> negative
+    // 3 --> dummy value
+    const [mood, setMood] = useState(3)
+    // for negative part
+    // 0 --> share
+    // 1 --> continue share
+    const [continueShare, setContinueShare] = useState(true)
 
     const fetchmsg = () => {
-        if(isSaveJournalNext) {
-            dispatch(onSaveJournal(inputMessage))
+        if (inputMessage == undefined || inputMessage == "") {
+            console.log("Please Enter A Valid Message")
+        } else {
+            chatHistory.push({ isOwnMessage: true, message: inputMessage })
+            console.log("Input :    " + inputMessage)
 
-            isSaveJournalNext = false;
-        }
+            if (isSaveJournalNext) {
 
-        var url = '/send-msg';
-        var response;
+                // This is not the final place for dispatch, should be dispatched after the user agreed (...-Journal(Yes)) , this part i havent done it
+                // later i will move the dispatch to its place , u can do it first
+                // The mesage should be send to JOURNAL at this point
+                // dispatch(onSaveJournal(inputMessage))
 
-        fetch('http://192.168.68.151:5000/send-msg', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                "text": `${inputMessage}`
-            })
-        })
-        .then(res=>{
-            return res.json();
-        })
-        .then(data => {
-            console.log(data)
-            if(data.isSaveJournal) {
-                isSaveJournalNext = true;
+                if (mood == 0) {
+                    // The mood should be send to MOODTRACKER at this point (mood tracker)
+                    // dispatch(onSaveMoodTracker(mood))
+                    fetch('http://192.168.0.190:5000/send-msg/neutralno-journalyes', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            "text": `${inputMessage}`
+                        })
+                    })
+                        .then(res => {
+                            return res.json();
+                        })
+                        .then(data => {
+                            chatHistory.push({ isOwnMessage: false, message: data.message[0].text.text[0] })
+                            setReply(data.message[0].text.text[0])
+                            console.log("Output :    " + data.message[0].text.text[0])
+                        })
+                } else if (mood == 1) {
+                    // The mood should be send to MOODTRACKER at this point
+                    // dispatch(onSaveMoodTracker(mood))
+                    fetch('http://192.168.0.190:5000/send-msg/positive-shareyes', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            "text": `${inputMessage}`
+                        })
+                    })
+                        .then(res => {
+                            return res.json();
+                        })
+                        .then(data => {
+                            chatHistory.push({ isOwnMessage: false, message: data.message[0].text.text[0] })
+                            setReply(data.message[0].text.text[0])
+                            console.log("Output :    " + data.message[0].text.text[0])
+                        })
+                } else if (mood == 2) {
+                    // The mood should be send to MOODTRACKER at this point
+                    // dispatch(onSaveMoodTracker(mood))
+                    if (continueShare) {
+                        fetch('http://192.168.0.190:5000/send-msg/negative-sharedyes', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                "text": `${inputMessage}`
+                            })
+                        })
+                            .then(res => {
+                                return res.json();
+                            })
+                            .then(data => {
+                                chatHistory.push({ isOwnMessage: false, message: data.message[0].text.text[0] })
+                                setReply(data.message[0].text.text[0])
+                                console.log("Output :    " + data.message[0].text.text[0])
+                            })
+                        setContinueShare(false)
+                    } else {
+                        fetch('http://192.168.0.190:5000/send-msg/negative-sharedyes-continueshareyes', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                "text": `${inputMessage}`
+                            })
+                        })
+                            .then(res => {
+                                return res.json();
+                            })
+                            .then(data => {
+                                chatHistory.push({ isOwnMessage: false, message: data.message[0].text.text[0] })
+                                setReply(data.message[0].text.text[0])
+                                console.log("Output :    " + data.message[0].text.text[0])
+                            })
+                        setContinueShare(true)
+                    }
+                }
+            } else {
+
+                fetch('http://192.168.0.190:5000/send-msg', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        "text": `${inputMessage}`
+                    })
+                })
+                    .then(res => {
+                        return res.json();
+                    })
+                    .then(data => {
+                        setMood(data.mood)
+                        console.log("Mood :     " + data.mood)
+                        if (data.isSaveJournal) {
+                            setIsSaveJournalNext(true)
+                        }
+
+                        chatHistory.push({ isOwnMessage: false, message: data.message[0].text.text[0] })
+                        setReply(data.message[0].text.text[0])
+                        console.log("Output :    " + data.message[0].text.text[0])
+                    })
             }
-            chatHistory.push({ isOwnMessage: false, message: data.message })
-
-        })
-
-        setInputMessage("")
+            setIsSaveJournalNext(false)
+            setInputMessage("")
+        }
     }
 
     // const fetchmsg = async e => {
@@ -64,45 +164,16 @@ const ChatBotScreen = (props) => {
     //         }),
     //     });
     //     const body = await response.text();
-        
+
     //     chatHistory.push({ isOwnMessage: false, message: response })
     // };
 
     const MessageHandler = (msg) => {
         setInputMessage(msg)
     }
-    /*
-        const AddChat = () => {
-            if (inputMessage == undefined || inputMessage == "") {
-                console.log("Please Enter A Valid Message")
-            } else {
-                setInputMessage()
-                //fetchmsg()
-                setReply(Math.floor(Math.random() * 10) + 1)
-    
-                chatHistory.push({ isOwnMessage: true, message: inputMessage })
-    
-                if (reply == 1) {
-                    chatHistory.push({ isOwnMessage: false, message: 'Hello' })
-                } else if (reply == 2) {
-                    chatHistory.push({ isOwnMessage: false, message: 'How is your day ?' })
-                } else if (reply == 3) {
-                    chatHistory.push({ isOwnMessage: false, message: 'Nice to meet you' })
-                } else if (reply == 4) {
-                    chatHistory.push({ isOwnMessage: false, message: 'My name is Teemo' })
-                } else if (reply == 5) {
-                    chatHistory.push({ isOwnMessage: false, message: 'Whatups' })
-                } else {
-                    chatHistory.push({ isOwnMessage: false, message: 'Have a nice day' })
-                }
-    
-                // Printing out input message by user
-                console.log(inputMessage)
-            }
-        }
-    */
+
     return (
-        <SafeAreaView behavior="padding" style={styles.container}>
+        <View behavior="padding" style={styles.container}>
 
             <LinearGradient colors={['#2974FA', '#38ABFD', '#43D4FF']} style={styles.backgroundColour}>
                 <ScrollView ref={scrollViewRef}
@@ -112,13 +183,13 @@ const ChatBotScreen = (props) => {
             </LinearGradient>
 
             <View style={styles.messageBoxContainer}>
-                <TextInput id="MSG" name="MSG" style={styles.messageBox} value={inputMessage} onChangeText={MessageHandler} />
+                <TextInput style={styles.messageBox} value={inputMessage} onChangeText={MessageHandler} />
 
                 <TouchableOpacity onPress={() => { fetchmsg() }} style={styles.sendContainer}>
                     <Feather name="send" size={35} color="blue" />
                 </TouchableOpacity>
             </View>
-        </SafeAreaView >
+        </View >
     )
 }
 
@@ -171,6 +242,5 @@ const mapDispatchToProps = dispatch => {
 
     }
 }
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatBotScreen);
