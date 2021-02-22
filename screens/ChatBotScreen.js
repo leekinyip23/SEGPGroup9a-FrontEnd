@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react'
-import { View, StyleSheet, ScrollView, _ScrollView } from 'react-native'
+import React, { useState, useRef, useEffect } from 'react'
+import { View, StyleSheet, ScrollView, _ScrollView, Alert } from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import MessageBubble from '../components/UI/MessageBubble'
 import { Feather } from '@expo/vector-icons';
@@ -7,6 +7,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 import { connect, useStore } from 'react-redux';
 import * as ACTION_TYPES from '../service/redux/action_types/chatbot';
+
+import { sendMessageAPI } from '../service/api/chatBot';
+import * as CHATBOT_ACTIONTYPE from '../service/api/actionType/chatBot';
 
 const ChatBotScreen = (props) => {
 
@@ -25,131 +28,82 @@ const ChatBotScreen = (props) => {
     // 1 --> continue share
     const [continueShare, setContinueShare] = useState(true)
 
+    useEffect(() => {
+        sendMessageAPI("Hi", false)
+            .then(data => {
+                // setChatHistory([{ isOwnMessage: false, message: data.message[0].text.text[0] }])
+                setChatHistory([
+                    ...chatHistory,
+                    { isOwnMessage: false, message: data.message[0].text.text[0] },
+                ])
+            })
+    }, [])
+
     const fetchmsg = () => {
         if (inputMessage == undefined || inputMessage == "") {
-            console.log("Please Enter A Valid Message")
+            Alert.alert(
+                'Invalid message!',
+                'Message cannot be empty!',
+                [
+                    {
+                        text: 'Ok',
+                        onPress: () => console.log("Invalid message prompt canceled")
+                    }
+                ]
+            )
         } else {
             chatHistory.push({ isOwnMessage: true, message: inputMessage })
             console.log("Input :    " + inputMessage)
 
-            if (isSaveJournalNext) {
+            let moodMessage = "";
+            let isEvent = false;
 
+            if (isSaveJournalNext) {
                 // This is not the final place for dispatch, should be dispatched after the user agreed (...-Journal(Yes)) , this part i havent done it
                 // later i will move the dispatch to its place , u can do it first
                 // The mesage should be send to JOURNAL at this point
                 // dispatch(onSaveJournal(inputMessage))
-
+                isEvent = true;
+                
                 if (mood == 0) {
                     // The mood should be send to MOODTRACKER at this point (mood tracker)
                     // dispatch(onSaveMoodTracker(mood))
-                    fetch('http://192.168.0.190:5000/send-msg/neutralno-journalyes', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            "text": `${inputMessage}`
-                        })
-                    })
-                        .then(res => {
-                            return res.json();
-                        })
-                        .then(data => {
-                            chatHistory.push({ isOwnMessage: false, message: data.message[0].text.text[0] })
-                            setReply(data.message[0].text.text[0])
-                            console.log("Output :    " + data.message[0].text.text[0])
-                        })
+                    moodMessage = CHATBOT_ACTIONTYPE.NEUTRAL_NO_JOURNAL_YES;
                 } else if (mood == 1) {
-                    // The mood should be send to MOODTRACKER at this point
-                    // dispatch(onSaveMoodTracker(mood))
-                    fetch('http://192.168.0.190:5000/send-msg/positive-shareyes', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            "text": `${inputMessage}`
-                        })
-                    })
-                        .then(res => {
-                            return res.json();
-                        })
-                        .then(data => {
-                            chatHistory.push({ isOwnMessage: false, message: data.message[0].text.text[0] })
-                            setReply(data.message[0].text.text[0])
-                            console.log("Output :    " + data.message[0].text.text[0])
-                        })
-                } else if (mood == 2) {
+                    moodMessage = CHATBOT_ACTIONTYPE.POSITIVE_SHARE_YES;
+
+                } else if (mood == -1) {
                     // The mood should be send to MOODTRACKER at this point
                     // dispatch(onSaveMoodTracker(mood))
                     if (continueShare) {
-                        fetch('http://192.168.0.190:5000/send-msg/negative-sharedyes', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                "text": `${inputMessage}`
-                            })
-                        })
-                            .then(res => {
-                                return res.json();
-                            })
-                            .then(data => {
-                                chatHistory.push({ isOwnMessage: false, message: data.message[0].text.text[0] })
-                                setReply(data.message[0].text.text[0])
-                                console.log("Output :    " + data.message[0].text.text[0])
-                            })
+                        moodMessage = CHATBOT_ACTIONTYPE.NEGATIVE_SHARED_YES;
                         setContinueShare(false)
                     } else {
-                        fetch('http://192.168.0.190:5000/send-msg/negative-sharedyes-continueshareyes', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                "text": `${inputMessage}`
-                            })
-                        })
-                            .then(res => {
-                                return res.json();
-                            })
-                            .then(data => {
-                                chatHistory.push({ isOwnMessage: false, message: data.message[0].text.text[0] })
-                                setReply(data.message[0].text.text[0])
-                                console.log("Output :    " + data.message[0].text.text[0])
-                            })
+                        moodMessage = CHATBOT_ACTIONTYPE.NEGATIVE_SHARED_YES_CONTINUE_SHARE_YES;
                         setContinueShare(true)
                     }
                 }
             } else {
-
-                fetch('http://192.168.0.190:5000/send-msg', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        "text": `${inputMessage}`
-                    })
-                })
-                    .then(res => {
-                        return res.json();
-                    })
-                    .then(data => {
-                        setMood(data.mood)
-                        console.log("Mood :     " + data.mood)
-                        if (data.isSaveJournal) {
-                            setIsSaveJournalNext(true)
-                        }
-
-                        chatHistory.push({ isOwnMessage: false, message: data.message[0].text.text[0] })
-                        setReply(data.message[0].text.text[0])
-                        console.log("Output :    " + data.message[0].text.text[0])
-                    })
+                moodMessage = inputMessage;
             }
-            setIsSaveJournalNext(false)
-            setInputMessage("")
+
+            sendMessageAPI(moodMessage, isEvent)
+                .then(data => {
+                    setMood(data.mood)
+                    console.log("Mood : " + data.mood)
+                    if (data.isSaveJournal) {
+                        setIsSaveJournalNext(true)
+                    }
+
+                    setChatHistory([
+                        ...chatHistory,
+                        { isOwnMessage: false, message: data.message[0].text.text[0] },
+                    ])
+                    // setReply(data.message[0].text.text[0])
+                    console.log("Output : " + data.message[0].text.text[0])
+                });
+            
+            setInputMessage("");
         }
     }
 

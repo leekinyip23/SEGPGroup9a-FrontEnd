@@ -37,33 +37,31 @@ const JournalScreen = (props) => {
     const journalPressHandler = (journal) => {
         props.navigation.navigate("JournalDetail", {
             journal: journal,
-
         })
     }
 
 
     return (
         <ScrollView>
-        <View style={styles.container}>
-            
-            <View style={styles.itemContainer}>
-                {journals && journals.map(journal => {
-                    return (
-                        <TouchableOpacity 
-                            key={journal.journal_id}
-                            style={styles.journalContainer}
-                            onPress={() => {journalPressHandler(journal)}}
-                        >
-                            <Journal 
-                                date={journal.date}
-                                title={journal.title}
-                                mood={journal.mood}
-                            />
-                        </TouchableOpacity>   
-                    )
-                })}
+            <View style={styles.container}>
+                <View style={styles.itemContainer}>
+                    {journals && journals.map(journal => {
+                        return (
+                            <TouchableOpacity 
+                                key={journal.journal_id}
+                                style={styles.journalContainer}
+                                onPress={() => {journalPressHandler(journal)}}
+                            >
+                                <Journal 
+                                    date={journal.date}
+                                    title={journal.title}
+                                    mood={journal.mood}
+                                />
+                            </TouchableOpacity>   
+                        )
+                    })}
+                </View>
             </View>
-        </View>
         </ScrollView>
     )
 }

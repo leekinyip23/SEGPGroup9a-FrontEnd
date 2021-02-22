@@ -1,7 +1,7 @@
 import * as ACTION_TYPES from '../action_types/account';
 
 const initialState = {
-    editAccount: []
+    editAccount: [],
 }
 
 export default (state = initialState, action) => {
