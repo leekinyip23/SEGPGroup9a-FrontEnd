@@ -16,22 +16,19 @@ const ChatBotScreen = (props) => {
     const scrollViewRef = useRef();
     const [inputMessage, setInputMessage] = useState('')
     const [chatHistory, setChatHistory] = useState([])
-    const [reply, setReply] = useState('')
+    const [isSaveToDB, setIsSaveToDB] = useState(false)
     const [isSaveJournalNext, setIsSaveJournalNext] = useState(false)
+    // -1 --> negative
     // 0 --> neutral
     // 1 --> positive
-    // 2 --> negative
-    // 3 --> dummy value
-    const [mood, setMood] = useState(3)
-    // for negative part
-    // 0 --> share
-    // 1 --> continue share
-    const [continueShare, setContinueShare] = useState(true)
+    // 2 --> normal conversation
+    const [mood, setMood] = useState(2)
+    const [journal, setJournal] = useState([])
+    const [continueShare, setContinueShare] = useState(false)
 
     useEffect(() => {
         sendMessageAPI("Hi", false)
             .then(data => {
-                // setChatHistory([{ isOwnMessage: false, message: data.message[0].text.text[0] }])
                 setChatHistory([
                     ...chatHistory,
                     { isOwnMessage: false, message: data.message[0].text.text[0] },
@@ -53,56 +50,63 @@ const ChatBotScreen = (props) => {
             )
         } else {
             chatHistory.push({ isOwnMessage: true, message: inputMessage })
+
+            console.log("******************************************************************")
             console.log("Input :    " + inputMessage)
 
             let moodMessage = "";
             let isEvent = false;
 
             if (isSaveJournalNext) {
-                // This is not the final place for dispatch, should be dispatched after the user agreed (...-Journal(Yes)) , this part i havent done it
-                // later i will move the dispatch to its place , u can do it first
-                // The mesage should be send to JOURNAL at this point
-                // dispatch(onSaveJournal(inputMessage))
-                isEvent = true;
-                
-                if (mood == 0) {
-                    // The mood should be send to MOODTRACKER at this point (mood tracker)
-                    // dispatch(onSaveMoodTracker(mood))
+                isEvent = true
+                setJournal([...journal, inputMessage])
+                if (mood == -1) {
+                    if (continueShare) {
+                        moodMessage = CHATBOT_ACTIONTYPE.NEGATIVE_SHARED_YES_CONTINUE_SHARE_YES;
+                        setContinueShare(false)
+                    } else {
+                        moodMessage = CHATBOT_ACTIONTYPE.NEGATIVE_SHARED_YES;
+                        setContinueShare(true)
+                    }
+                } else if (mood == 0) {
                     moodMessage = CHATBOT_ACTIONTYPE.NEUTRAL_NO_JOURNAL_YES;
                 } else if (mood == 1) {
                     moodMessage = CHATBOT_ACTIONTYPE.POSITIVE_SHARE_YES;
-
-                } else if (mood == -1) {
-                    // The mood should be send to MOODTRACKER at this point
-                    // dispatch(onSaveMoodTracker(mood))
-                    if (continueShare) {
-                        moodMessage = CHATBOT_ACTIONTYPE.NEGATIVE_SHARED_YES;
-                        setContinueShare(false)
-                    } else {
-                        moodMessage = CHATBOT_ACTIONTYPE.NEGATIVE_SHARED_YES_CONTINUE_SHARE_YES;
-                        setContinueShare(true)
-                    }
                 }
+                setIsSaveJournalNext(false)
             } else {
-                moodMessage = inputMessage;
+                moodMessage = inputMessage
+            }
+
+            if (isSaveToDB) {
+                // dispatch mood
+                // dispatch journal
+                console.log("Things save to DB ::")
+                console.log("Mood : " + mood)
+                console.log("Journal content : " + journal)
+                setIsSaveToDB(false)
             }
 
             sendMessageAPI(moodMessage, isEvent)
                 .then(data => {
-                    setMood(data.mood)
-                    console.log("Mood : " + data.mood)
+
                     if (data.isSaveJournal) {
                         setIsSaveJournalNext(true)
                     }
+
+                    if (data.isSaveToDB) {
+                        setIsSaveToDB(true)
+                    }
+
+                    setMood(data.mood)
 
                     setChatHistory([
                         ...chatHistory,
                         { isOwnMessage: false, message: data.message[0].text.text[0] },
                     ])
-                    // setReply(data.message[0].text.text[0])
+
                     console.log("Output : " + data.message[0].text.text[0])
                 });
-            
             setInputMessage("");
         }
     }

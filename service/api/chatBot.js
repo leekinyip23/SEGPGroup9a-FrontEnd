@@ -1,6 +1,6 @@
-const USER_IP_ADDRESS = "192.168.68.151";
+const USER_IP_ADDRESS = "192.168.0.190";
 
-export const sendMessageAPI = ( message, isEvent ) => {
+export const sendMessageAPI = (message, isEvent) => {
     return fetch(`http://${USER_IP_ADDRESS}:5000/send-msg`, {
         method: 'POST',
         headers: {
@@ -11,5 +11,5 @@ export const sendMessageAPI = ( message, isEvent ) => {
             "isEvent": `${isEvent}`
         })
     })
-    .then(res => res.json());
+        .then(res => res.json());
 }
