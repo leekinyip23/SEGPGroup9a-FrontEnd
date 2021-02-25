@@ -46,8 +46,8 @@ app.post('/send-msg', (req, res) => {
                 mood = 1
             }
 
-            if (data.intent.displayName === "Negative-Shared(Yes)" ||
-                data.intent.displayName === "Negative-Shared(Yes)-ContinueShare(Yes)" ||
+            if (data.intent.displayName === "Negative-Share(Yes)" ||
+                data.intent.displayName === "Negative-Share(Yes)-ContinueShare(Yes)" ||
                 data.intent.displayName === "Neutral(No)-Journal(Yes)" ||
                 data.intent.displayName === "Positive-Share(Yes)"
 
@@ -55,8 +55,8 @@ app.post('/send-msg', (req, res) => {
                 isSaveJournal = true
             }
 
-            if (data.intent.displayName === "Negative-Shared(Yes)-ContinueShare(Yes)-Journal(Yes)-End" ||
-                data.intent.displayName === "Negative-Shared(Yes)-ContinueShare(No)-Journal(Yes)-End" ||
+            if (data.intent.displayName === "Negative-Share(Yes)-ContinueShare(Yes)-Journal(Yes)-End" ||
+                data.intent.displayName === "Negative-Share(Yes)-ContinueShare(No)-Journal(Yes)-End" ||
                 data.intent.displayName === "Neutral(No)-Journal(Yes)-End" ||
                 data.intent.displayName === "Positive-Share(Yes)-Journal(Yes)-End"
             ) {

@@ -62,10 +62,10 @@ const ChatBotScreen = (props) => {
                 setJournal([...journal, inputMessage])
                 if (mood == -1) {
                     if (continueShare) {
-                        moodMessage = CHATBOT_ACTIONTYPE.NEGATIVE_SHARED_YES_CONTINUE_SHARE_YES;
+                        moodMessage = CHATBOT_ACTIONTYPE.NEGATIVE_SHARE_YES_CONTINUE_SHARE_YES;
                         setContinueShare(false)
                     } else {
-                        moodMessage = CHATBOT_ACTIONTYPE.NEGATIVE_SHARED_YES;
+                        moodMessage = CHATBOT_ACTIONTYPE.NEGATIVE_SHARE_YES;
                         setContinueShare(true)
                     }
                 } else if (mood == 0) {
