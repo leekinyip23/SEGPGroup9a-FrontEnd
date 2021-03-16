@@ -5,6 +5,7 @@ const initialState = {
 }
 
 export default (state = initialState, action) => {
+    let newJournals = JSON.parse(JSON.stringify(state.journals))
     switch(action.type) {
         case ACTION_TYPES.SAVE_JOURNAL:
             return {
@@ -12,13 +13,20 @@ export default (state = initialState, action) => {
                 journals: action.newJournals
             }
         case ACTION_TYPES.UPDATE_JOURNAL:
-            let newJournals = JSON.parse(JSON.stringify(state.journals))
+            
             newJournals.map((journal, index) => {
-                if(journal.journal_id === action.newJournalEntryData.journal_id) {
+                if(journal._id === action.newJournalEntryData._id) {
                     newJournals[index] = action.newJournalEntryData;
                 }
                 return null;
             })
+
+            return {
+                ...state,
+                journals: newJournals,
+            }
+        case ACTION_TYPES.ADD_JOURNAL:
+            newJournals = [...newJournals, action.newJournal]
             return {
                 ...state,
                 journals: newJournals,

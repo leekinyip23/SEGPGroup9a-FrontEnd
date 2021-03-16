@@ -7,14 +7,13 @@ import { connect } from 'react-redux';
 import * as ACTION_TYPES from '../../service/redux/action_types/journal';
 
 import Journal from '../../components/JournalScreen/Journal';
-
+import { addJournalAPI, deleteJournalAPI, updateJournalAPI, fetchJournalAPI } from '../../service/api/journal';
 
 const DUMMY_DATA = require("../../dummy_data/dummy_data.json");
 
 
 const JournalScreen = (props) => {
-    const [journals, setJournals] = useState(DUMMY_DATA.journals);
-    const [displayJournals, setDisplatJournals] = useState([...DUMMY_DATA.journals]);
+    const [journals, setJournals] = useState();
     const [searchMessage, setSearchMessage] = useState("");
 
     //For when API is avaible
@@ -30,7 +29,11 @@ const JournalScreen = (props) => {
     // }, [])
 
     useEffect(() => {
-        props.onSaveJournal(journals)
+        fetchJournalAPI(props.loginReducer.userId)
+        .then(journals => {
+            props.onSaveJournal(journals)
+            setJournals(journals)
+        })
     }, [])
 
     useEffect(() => {
@@ -43,8 +46,18 @@ const JournalScreen = (props) => {
         })
     }
 
+    const journalDateSplit = (journalDate) => {
+        let simplifiedDate = journalDate.split("T")
+
+        return simplifiedDate[0]
+    }
+
     const searchBarHandler = searchMessage => {
         setSearchMessage(searchMessage);
+    }
+
+    const onAddJournalPressHandler = () => {
+        props.navigation.navigate("JournalAdd")
     }
 
 
@@ -60,12 +73,12 @@ const JournalScreen = (props) => {
                                 //Afterward map it out as component
                                 return (
                                     <TouchableOpacity 
-                                        key={journal.journal_id}
+                                        key={journal._id}
                                         style={styles.journalContainer}
                                         onPress={() => {journalPressHandler(journal)}}
                                     >
                                         <Journal 
-                                            date={journal.date}
+                                            date={journalDateSplit(journal.createdAt)}
                                             title={journal.title}
                                             mood={journal.mood}
                                         />
@@ -85,6 +98,14 @@ const JournalScreen = (props) => {
                             onChangeText={text => searchBarHandler(text)}
                             value={searchMessage}
                         />
+                    </View>
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity
+                            onPress={() => onAddJournalPressHandler()}
+                            style={styles.roundButton}
+                        >
+                            <Text style={{fontSize: 40, color: "#86939e"}}>+</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
         </Fragment>
@@ -108,8 +129,25 @@ const styles = StyleSheet.create({
         borderTopWidth: 0,
         borderBottomWidth: 0,
     },
+    buttonContainer: {
+        position: "absolute",
+        bottom: 10,
+        right: "46%",
+        marginTop: "5%",
+        width: "10%",
+    },
+    roundButton: {
+        alignItems: "center",
+        backgroundColor: '#303337',
+        borderRadius: 100,
+        width: 50,
+        height: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 5,
+    },  
     scrollView: {
-        marginTop: "20%",
+        marginTop: "0%",
     },
     itemContainer: {
         flex: 1,
@@ -129,6 +167,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => ({
     journalReducer: state.journalReducer,
+    loginReducer: state.loginReducer,
 });
 
 const mapDispatchToProps = dispatch => {

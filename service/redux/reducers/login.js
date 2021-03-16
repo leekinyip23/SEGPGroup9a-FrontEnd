@@ -3,6 +3,7 @@ import * as ACTION_TYPES from '../action_types/login';
 const initialState = {
     name: "",
     password: "",
+    userId: "",
 }
 
 export default (state = initialState, action) => {
@@ -11,13 +12,15 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 name: action.name,
-                password: action.password
+                password: action.password,
+                userId: action.userId,
             };
         case ACTION_TYPES.CLEAR_ACCOUNT:
             return {
                 ...state,
-                name: " ",
-                password: " "
+                name: "",
+                password: "",
+                userId: "",
             }
         default: return state;
     }

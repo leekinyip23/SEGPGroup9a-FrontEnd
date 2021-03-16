@@ -1,7 +1,7 @@
-const USER_IP_ADDRESS = "192.168.0.190";
+import { USER_IP_ADDRESS, SERVER_PORT } from './apiConstant';
 
 export const sendMessageAPI = (message, isEvent) => {
-    return fetch(`http://${USER_IP_ADDRESS}:5000/send-msg`, {
+    return fetch(`http://${USER_IP_ADDRESS}:${SERVER_PORT}/send-msg`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

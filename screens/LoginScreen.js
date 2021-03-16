@@ -4,6 +4,8 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import { connect } from 'react-redux';
 import * as LOGIN_ACTION_TYPES from '../service/redux/action_types/login';
 
+import { loginUserAPI, registerUserAPI } from '../service/api/login';
+
 import Login from '../components/UI/Login';
 
 
@@ -24,12 +26,16 @@ const LoginScreen = (props) => {
     }
 
     const loginHandler = () => {
-        props.onLoginClick(userId, userPassword);
-        setUserId("");
-        setUserPassword("");
-        
-
-        props.navigation.navigate("App")
+        loginUserAPI(userId, userPassword)
+        .then((userInfo) => {
+            if(userInfo.username && userInfo._id) {
+                props.onLoginClick(userId, userPassword, userInfo._id);
+                props.navigation.navigate("App")
+            }
+            setUserId("");
+            setUserPassword("");
+            
+        })
     }
 
     return (
@@ -144,10 +150,11 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
     return {
-        onLoginClick: (newName, newPassword) => dispatch({
+        onLoginClick: (newName, newPassword, newUserId) => dispatch({
             type: LOGIN_ACTION_TYPES.LOGIN,
             name: newName,
             password: newPassword,
+            userId: newUserId,
         }),
         dispatch,
     }

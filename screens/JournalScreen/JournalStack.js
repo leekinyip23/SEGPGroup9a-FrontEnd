@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import JournalDetailScreen from './JournalDetailScreen';
 import JournalScreen from './JournalScreen';
+import JournalAddScreen from './JouranlAddScreen';
 
 const FullStack = createStackNavigator();
 
@@ -24,6 +25,13 @@ export default function RootStack() {
           ({route}) => ({
             title: route.params.journal.title
           })}
+      />
+      <FullStack.Screen 
+        name="JournalAdd"
+        component={JournalAddScreen}
+        options= {{
+          title: "Add Journal"
+        }}
       />
     </FullStack.Navigator>
 

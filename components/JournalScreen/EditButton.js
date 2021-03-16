@@ -4,7 +4,7 @@ import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 const EditButton = (props) => {
     return (
         <TouchableOpacity 
-            style={styles.buttonContainer} 
+            style={{...styles.buttonContainer, ...props.style}} 
             onPress={() => {
                 props.onPressHandler()
             }}

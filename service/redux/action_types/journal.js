@@ -1,2 +1,3 @@
 export const SAVE_JOURNAL = "SAVE_JOURNAL";
 export const UPDATE_JOURNAL = "UPDATE_JOURNAL";
+export const ADD_JOURNAL = "ADD_JOURNAL";

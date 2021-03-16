@@ -1,14 +1,16 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, TextInput, Keyboard } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, TextInput, Keyboard, TouchableWithoutFeedback } from 'react-native';
 
 import { connect } from 'react-redux';
 import * as ACTION_TYPES from '../../service/redux/action_types/journal';
 
 import EditButton from '../../components/JournalScreen/EditButton';
 
+import { updateJournalAPI } from '../../service/api/journal';
+
 const JournalDetailScreen = (props) => {
     const [journal, setJournal] = useState(props.route.params.journal);
-    const [journalBody, setJournalBody] = useState(props.route.params.journal.body_text);
+    const [journalBody, setJournalBody] = useState(props.route.params.journal.body);
     const [isBodyEditable, setIsBodyEditable] = useState(false);
     const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
@@ -38,57 +40,71 @@ const JournalDetailScreen = (props) => {
     const saveChangeHandler = () => {
         //Copy the current journal
         let newJournal = JSON.parse(JSON.stringify(journal));
-        //Replace the current journal's body_text with new text
-        newJournal.body_text = journalBody;
+
+        //Replace the current journal's body with new text
+        newJournal.body = journalBody;
+
         //Update state and redux, then set to not editable
         setJournal(newJournal);
-        props.onUpdateJournal(newJournal);
-        setIsBodyEditable(false);
+
+        updateJournalAPI(newJournal._id, newJournal.title, newJournal.body, newJournal.mood)
+            .then(reply => {
+                if(reply.n > 0) {
+                    console.log("Journal Updated Successfully!")
+                    props.onUpdateJournal(newJournal);
+                    setIsBodyEditable(false);
+                } else{
+                    console.log("Journal Update Fail!")
+                }
+            })
+
+        
     }
 
     //Handle when discard change is pressed
     const dischardChangeHandler = () => {
         //Reset the body to original text
-        setJournalBody(journal.body_text);
+        setJournalBody(journal.body);
         //Set editable to false
         setIsBodyEditable(false);
     }
 
     return (
-        <View style={styles.container}>
-            <View style={{...styles.itemContainer, ...styles.journalContainer}}>
-                <View style={styles.journalBody}>
-                    {isBodyEditable 
-                        ? <TextInput
-                            style={styles.journalBodyText}
-                            onChangeText={text => setJournalBody(text)}
-                            value={journalBody}
-                            multiline={true}
-                            autoFocus={true}
-                        /> 
-                        : <Text style={styles.journalBodyText}>{journalBody}</Text>
-                    }
-                </View>
-            </View>
-            {isBodyEditable 
-                ? !isKeyboardVisible 
-                    && <View style={styles.editButtonViewContainer}>
-                        <EditButton 
-                            onPressHandler={saveChangeHandler}
-                            bodyText={"Save Changes"}
-                        />
-                         <EditButton 
-                            onPressHandler={dischardChangeHandler}
-                            bodyText={"Discard Changes"}
-                        />
+        <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss()}}>
+            <View style={styles.container}>
+                <View style={{...styles.itemContainer, ...styles.journalContainer}}>
+                    <View style={styles.journalBody}>
+                        {isBodyEditable 
+                            ? <TextInput
+                                style={styles.journalBodyText}
+                                onChangeText={text => setJournalBody(text)}
+                                value={journalBody}
+                                multiline={true}
+                                autoFocus={true}
+                            /> 
+                            : <Text style={styles.journalBodyText}>{journalBody}</Text>
+                        }
                     </View>
-                : <TouchableOpacity style={styles.buttonContainer} onPress={() => {setIsBodyEditable(true)}}>
-                    <Text style={styles.buttonText}>Edit</Text>
-                </TouchableOpacity >
-            }
-            
-        </View>
-        )
+                </View>
+                {isBodyEditable 
+                    ? !isKeyboardVisible 
+                        && <View style={styles.editButtonViewContainer}>
+                            <EditButton 
+                                onPressHandler={saveChangeHandler}
+                                bodyText={"Save Changes"}
+                            />
+                            <EditButton 
+                                onPressHandler={dischardChangeHandler}
+                                bodyText={"Discard Changes"}
+                            />
+                        </View>
+                    : <TouchableOpacity style={styles.buttonContainer} onPress={() => {setIsBodyEditable(true)}}>
+                        <Text style={styles.buttonText}>Edit</Text>
+                    </TouchableOpacity >
+                }
+            </View>
+        </TouchableWithoutFeedback>
+    )
 }
 
 const styles = StyleSheet.create({
