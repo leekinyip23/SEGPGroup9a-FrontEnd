@@ -1,2 +1,2 @@
-export const USER_IP_ADDRESS = "172.17.3.15";
+export const USER_IP_ADDRESS = "192.168.0.190";
 export const SERVER_PORT = "8080";

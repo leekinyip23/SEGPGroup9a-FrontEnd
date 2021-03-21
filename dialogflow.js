@@ -4,7 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { json } = require('body-parser');
 const app = express()
-const port = 5000
+const port = 8080
 const sessionId = uuid.v4();
 
 app.use(bodyParser.urlencoded({
