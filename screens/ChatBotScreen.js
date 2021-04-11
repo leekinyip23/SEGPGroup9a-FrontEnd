@@ -7,9 +7,13 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 import { connect, useStore } from 'react-redux';
 import * as ACTION_TYPES from '../service/redux/action_types/chatbot';
+import * as JOURNAL_ACTION_TYPES from '../service/redux/action_types/journal';
+import { addJournalAPI } from '../service/api/journal'
 
 import { sendMessageAPI } from '../service/api/chatBot';
 import * as CHATBOT_ACTIONTYPE from '../service/api/actionType/chatBot';
+
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const ChatBotScreen = (props) => {
 
@@ -25,6 +29,8 @@ const ChatBotScreen = (props) => {
     const [mood, setMood] = useState(2)
     const [journal, setJournal] = useState([])
     const [continueShare, setContinueShare] = useState(false)
+
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         sendMessageAPI("Hi", false)
@@ -79,14 +85,22 @@ const ChatBotScreen = (props) => {
             }
 
             if (isSaveToDB) {
-                // dispatch mood
-                // dispatch journal
+                let currentDate = new Date().toDateString()
+                //Call api
+                setIsLoading(true);
+                addJournalAPI(props.loginReducer.userId, currentDate, journal, mood)
+                    .then(data => {
+                        console.log("Journal added successfully!");
+                        onSaveToJournal(data);
+                        setIsLoading(false);
+                    })
                 console.log("Things save to DB ::")
                 console.log("Mood : " + mood)
                 console.log("Journal content : " + journal)
                 setIsSaveToDB(false)
             }
 
+            setIsLoading(true);
             sendMessageAPI(moodMessage, isEvent)
                 .then(data => {
 
@@ -106,6 +120,7 @@ const ChatBotScreen = (props) => {
                     ])
 
                     console.log("Output : " + data.message[0].text.text[0])
+                    setIsLoading(false);
                 });
             setInputMessage("");
         }
@@ -132,7 +147,10 @@ const ChatBotScreen = (props) => {
 
     return (
         <View behavior="padding" style={styles.container}>
-
+            <Spinner 
+                visible={isLoading}
+            />
+    
             <LinearGradient colors={['#2974FA', '#38ABFD', '#43D4FF']} style={styles.backgroundColour}>
                 <ScrollView ref={scrollViewRef}
                     onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}>
@@ -192,12 +210,17 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = state => ({
-    chatBotReducer: state.chatbotReducer
+    chatBotReducer: state.chatbotReducer,
+    loginReducer: state.loginReducer,
 })
 
 const mapDispatchToProps = dispatch => {
     return {
-
+        onSaveToJournal: (newJournal) => dispatch({
+            type: JOURNAL_ACTION_TYPES.ADD_JOURNAL,
+            newJournal: newJournal,
+        }),
+        dispatch,
     }
 }
 

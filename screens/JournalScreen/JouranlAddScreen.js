@@ -1,27 +1,45 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import {Text, View, StyleSheet, TextInput, TouchableWithoutFeedback, Keyboard} from 'react-native';
 
-
 import * as ACTION_TYPES from '../../service/redux/action_types/journal';
 import { connect } from 'react-redux';
 
 import { addJournalAPI } from '../../service/api/journal'
 
 import EditButton from '../../components/JournalScreen/EditButton';
+import Spinner from 'react-native-loading-spinner-overlay';
+import { Alert } from 'react-native';
 
 const JournalAddScreen = (props) => {
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     const [currentFocus, setCurrentFocus] = useState(null) 
 
     const confirmButtonHandler = () => {
+        setIsLoading(true);
         addJournalAPI(props.loginReducer.userId,title,body,0)
-        .then(data => {
-            console.log("Journal added successfully!");
-            props.onAddJournal(data);
-            props.navigation.navigate("JournalOverview")
-        })
+            .then(data => {
+                setIsLoading(false);
+                props.onAddJournal(data);
+                Alert.alert(
+                    "Add Journal",
+                    "Journal added successfully!",
+                    [
+                        {
+                            text: "Ok",
+                            onPress: () => {props.navigation.navigate("JournalOverview")},
+                            style: "default"
+                        }
+                    ]
+                ),
+                {
+                    cancelable: true,
+                    onDismiss: () => props.navigation.navigate("JournalOverview")
+                }
+                
+            })
     }
 
     let focusedStyle;
@@ -38,7 +56,9 @@ const JournalAddScreen = (props) => {
             setCurrentFocus(null)
         }}>
             <View style={styles.container}>
-                
+                <Spinner 
+                    visible={isLoading}
+                />
                 {(currentFocus === null || currentFocus === "title") && 
                     <Fragment>
                         <View style={styles.inputHeadingContainer}>

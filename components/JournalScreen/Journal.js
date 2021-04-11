@@ -1,6 +1,8 @@
 import React from 'react';
 import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 
+import { Icon } from 'react-native-elements'
+
 const Journal = (props) => {
     return (
         <View>
@@ -8,6 +10,12 @@ const Journal = (props) => {
             <View style={styles.textBody}>
                 <Text style={styles.textMood}>{props.mood}</Text>
                 <Text style={styles.textTitle}>{props.title}</Text>
+                <Icon
+                    style={styles.deleteIcon}
+                    name="delete"
+                    size={40}
+                    onPress={props.onDelete}
+                />
             </View>
         </View>
     )
@@ -36,6 +44,9 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         fontSize: 20,
         flex: 5,
+    },
+    deleteIcon: {
+        margin: 10,
     },
 })
 

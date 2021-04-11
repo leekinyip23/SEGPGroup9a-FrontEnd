@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import * as ACTION_TYPES from '../../service/redux/action_types/journal';
 
 import EditButton from '../../components/JournalScreen/EditButton';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import { updateJournalAPI } from '../../service/api/journal';
 
@@ -13,6 +14,7 @@ const JournalDetailScreen = (props) => {
     const [journalBody, setJournalBody] = useState(props.route.params.journal.body);
     const [isBodyEditable, setIsBodyEditable] = useState(false);
     const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
 
     //Add keyboard listener
@@ -47,8 +49,10 @@ const JournalDetailScreen = (props) => {
         //Update state and redux, then set to not editable
         setJournal(newJournal);
 
+        setIsLoading(true);
         updateJournalAPI(newJournal._id, newJournal.title, newJournal.body, newJournal.mood)
             .then(reply => {
+                setIsLoading(false);
                 if(reply.n > 0) {
                     console.log("Journal Updated Successfully!")
                     props.onUpdateJournal(newJournal);
@@ -72,6 +76,9 @@ const JournalDetailScreen = (props) => {
     return (
         <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss()}}>
             <View style={styles.container}>
+                <Spinner 
+                    visible={isLoading}
+                />
                 <View style={{...styles.itemContainer, ...styles.journalContainer}}>
                     <View style={styles.journalBody}>
                         {isBodyEditable 

@@ -5,15 +5,17 @@ import { connect } from 'react-redux';
 import * as LOGIN_ACTION_TYPES from '../service/redux/action_types/login';
 
 import { loginUserAPI, registerUserAPI } from '../service/api/login';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import Login from '../components/UI/Login';
+import { Alert } from 'react-native';
 
 
 const LoginScreen = (props) => {
     const [userId, setUserId] = useState("");
     const [userPassword, setUserPassword] = useState("");
-
     const [hidePass, setHidePass] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
 
     const idChangeHandler = (id) => {
         id = id.replace(/\s+/g, '');
@@ -26,20 +28,40 @@ const LoginScreen = (props) => {
     }
 
     const loginHandler = () => {
+        setIsLoading(true);
         loginUserAPI(userId, userPassword)
         .then((userInfo) => {
+            setIsLoading(false);
             if(userInfo.username && userInfo._id) {
                 props.onLoginClick(userId, userPassword, userInfo._id);
                 props.navigation.navigate("App")
+            } else {
+                Alert.alert(
+                    `Invalid login`,
+                    "Incorrect id or password",
+                    [
+                        {
+                            text: "Ok",
+                            onPress: () => {},
+                            style: "default",
+                        }
+                    ],
+                    {
+                        cancelable: true,
+                        onDismiss: () => {}
+                    }
+                )
             }
             setUserId("");
             setUserPassword("");
-            
         })
     }
 
     return (
         <View style={styles.container}>
+            <Spinner 
+                visible={isLoading}
+            />
             <Image
                 style={styles.logoContainer}
                 source={require('../assets/logo.jpeg')}

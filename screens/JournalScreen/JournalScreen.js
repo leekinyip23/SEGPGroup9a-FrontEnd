@@ -1,13 +1,15 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 
 
 import { connect } from 'react-redux';
 import * as ACTION_TYPES from '../../service/redux/action_types/journal';
+import { addJournalAPI, deleteJournalAPI, updateJournalAPI, fetchJournalAPI } from '../../service/api/journal';
 
 import Journal from '../../components/JournalScreen/Journal';
-import { addJournalAPI, deleteJournalAPI, updateJournalAPI, fetchJournalAPI } from '../../service/api/journal';
+import Spinner from 'react-native-loading-spinner-overlay';
+
 
 const DUMMY_DATA = require("../../dummy_data/dummy_data.json");
 
@@ -15,6 +17,7 @@ const DUMMY_DATA = require("../../dummy_data/dummy_data.json");
 const JournalScreen = (props) => {
     const [journals, setJournals] = useState();
     const [searchMessage, setSearchMessage] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     //For when API is avaible
 
@@ -29,10 +32,12 @@ const JournalScreen = (props) => {
     // }, [])
 
     useEffect(() => {
+        setIsLoading(true);
         fetchJournalAPI(props.loginReducer.userId)
         .then(journals => {
             props.onSaveJournal(journals)
             setJournals(journals)
+            setIsLoading(false);
         })
     }, [])
 
@@ -60,10 +65,71 @@ const JournalScreen = (props) => {
         props.navigation.navigate("JournalAdd")
     }
 
+    const deleteHandler = (journalId) => {
+        const newJournal = journals.filter(journal => {
+            if(journal._id !== journalId) {
+                return journal
+            }
+        })
+        
+        setIsLoading(true);
+        deleteJournalAPI(journalId).then(data => {
+            setIsLoading(false);
+            let alertMessage;
+            if(data.n === 1) {
+                setJournals(newJournal);
+                alertMessage = "Journal Deleted Successfully!"
+            } else {
+                alertMessage = "Journal Delete Failed"
+            }
+            Alert.alert(
+                "Delete Journal",
+                alertMessage,
+                [
+                    {
+                        text: "Ok",
+                        onPress: () => {},
+                        style: "default"
+                    }
+                ]
+            ),
+            {
+                cancelable: true,
+                onDismiss: () => console.log("Delete dismissed")
+            }
+            
+        })
+    }
+
+    const deletePromptHandler = (journalId) => {
+        Alert.alert(
+            `Deleting journal`,
+            "Are you sure you want to delete this journal?",
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Delete"),
+                    style: "cancel",
+                },
+                {
+                    text: "Confirm",
+                    onPress: () => deleteHandler(journalId),
+                    style: "default"
+                }
+            ],
+            {
+                cancelable: true,
+                onDismiss: () => console.log("Delete dismissed")
+            }
+        )
+    }
 
     return (
         <Fragment>
                 <View style={styles.container}>
+                    <Spinner 
+                        visible={isLoading}
+                    />
                     <ScrollView contentContainerStyle={styles.scrollView}>
                         <View style={styles.itemContainer}> 
                             {journals && journals.filter(journal => {
@@ -81,6 +147,7 @@ const JournalScreen = (props) => {
                                             date={journalDateSplit(journal.createdAt)}
                                             title={journal.title}
                                             mood={journal.mood}
+                                            onDelete={() => deletePromptHandler(journal._id)}
                                         />
                                     </TouchableOpacity>  
                                 )
@@ -148,6 +215,7 @@ const styles = StyleSheet.create({
     },  
     scrollView: {
         marginTop: "0%",
+        paddingTop: "20%"
     },
     itemContainer: {
         flex: 1,
