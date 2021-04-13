@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Text,View, StyleSheet, TouchableOpacity,Button } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Button } from 'react-native';
 import { Avatar, Accessory } from "react-native-elements";
-
+import { Fontisto } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import * as ACTION_TYPES from '../../service/redux/action_types/account';
 
@@ -42,79 +42,86 @@ const AccountScreen = (props) => {
 
     return (
         <View style={styles.container}>
-        
-                {editAccount && editAccount.map(account => {
-                    return (
-                        
-                        <View
-                        
+
+            {editAccount && editAccount.map(account => {
+                return (
+
+                    <View
+
                         key={account.account_id}
                         style={styles.container}
                     >
-                      
-                       <View>
-                       <Text style={styles.Text}>Your Profile</Text>
 
-                       <Avatar
-    
-      size="xlarge"
-      title="USER"
-      titleStyle={{fontSize:48}}
-      onPress={() => console.log("Work!")}
-      activeOpacity={0.7}
-      containerStyle={{ marginTop: -30,marginBottom:20, marginLeft:80 }}
-      source={{
-        uri:
-          'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-      }}
-      onAccessoryPress={() => Alert.alert("change avatar")}
-      rounded
-  > 
- <Accessory
- 
- />
-</Avatar>
+                        <View>
+                            <Text style={styles.Text}>Profile</Text>
+
+                            {/* <Avatar
+
+                                size="xlarge"
+                                title="USER"
+                                titleStyle={{ fontSize: 48 }}
+                                onPress={() => console.log("Work!")}
+                                activeOpacity={0.7}
+                                containerStyle={{ marginTop: -30, marginBottom: 20, marginLeft: 80 }}
+                                source={{
+                                    uri:
+                                        'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
+                                }}
+                                onAccessoryPress={() => Alert.alert("change avatar")}
+                                rounded
+                            >
+                            </Avatar> */}
+                            <TouchableOpacity onPress={() => { console.log("Work!") }} style={styles.avatarContainer} >
+                                <Fontisto name={account.gender.toLowerCase()} size={150} color="black" alignItems="center" />
+                            </TouchableOpacity>
 
                             <View style={styles.inputContainer}>
-                            <Account 
-                            
-                                username= {account.username}
+                                <Account
+
+                                    username={account.username}
                                 />
-                                 </View>
-                                 <View style={styles.inputContainer}>
-                                  <Account 
-                                UserID={account.UserID}
+                            </View>
+                            <View style={styles.inputContainer}>
+                                <Account
+                                    UserID={account.UserID}
                                 />
-                                </View>
-                               
-                                <View style={styles.inputContainer}>
-                                <Account 
-                                gender={account.gender}
+                            </View>
+
+                            <View style={styles.inputContainer}>
+                                <Account
+                                    gender={account.gender}
                                 />
-                                </View>
-                                <View style={styles.inputContainer}>
-                                <Account 
-                                userlocation={account.userlocation}
-                            />
-                             </View>
-                    
-                 <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={() => {AccountPressHandler(account)}}>
-                  <Text style={styles.buttonText}>Edit</Text>
-                </TouchableOpacity>
-               
-                <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={() =>  props.navigation.navigate("LoginScreen")}>
-                  <Text style={styles.buttonText}>Log Out</Text>
-                </TouchableOpacity>
-          
-                     
-                             </View>
-                             </View>   
-                  )  })}
-        
+                            </View>
+                            <View style={styles.inputContainer}>
+                                <Account
+                                    userlocation={account.userlocation}
+                                />
+                            </View>
+
+                            <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={() => { AccountPressHandler(account) }}>
+                                <Text style={styles.buttonText}>Edit</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={() => props.navigation.navigate("LoginScreen")}>
+                                <Text style={styles.buttonText}>Log Out</Text>
+                            </TouchableOpacity>
+
+
+                        </View>
+                    </View>
+                )
+            })}
+
         </View>
     )
 }
 const styles = StyleSheet.create({
+
+    avatarContainer: {
+        alignItems: 'center',
+        marginVertical: 30,
+    },
+
     container: {
         flex: 1,
         alignItems: 'center',
@@ -146,17 +153,16 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         flexDirection: 'row',
         alignItems: 'center',
-        color:'#BFBFBF',
+        color: '#BFBFBF',
     },
     Text: {
-
-        marginLeft: 16,
+        marginLeft: 100,
         borderBottomColor: '#FFFFFF',
-        fontSize:18,
-        color:'white',
-        fontSize:36,
-        padding:45,
-       
+        fontSize: 18,
+        color: 'white',
+        fontSize: 36,
+        padding: 10,
+
     },
     editbuttonContainer: {
         height: 45,
@@ -175,7 +181,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 20,
         marginBottom: 5,
-        marginLeft:65,
+        marginLeft: 65,
         width: 200,
         borderRadius: 30,
     },

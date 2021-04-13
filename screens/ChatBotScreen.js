@@ -147,10 +147,10 @@ const ChatBotScreen = (props) => {
 
     return (
         <View behavior="padding" style={styles.container}>
-            <Spinner 
+            <Spinner
                 visible={isLoading}
             />
-    
+
             <LinearGradient colors={['#2974FA', '#38ABFD', '#43D4FF']} style={styles.backgroundColour}>
                 <ScrollView ref={scrollViewRef}
                     onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}>
