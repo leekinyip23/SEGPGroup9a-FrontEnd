@@ -11,7 +11,7 @@ import { Fontisto } from '@expo/vector-icons';
 const AccountEditScreen = (props) => {
     const [account, setAccount] = useState(props.route.params.account);
     const [accUsername, setaccUsername] = useState(props.route.params.account.username);
-    const [accID, setaccID] = useState(props.route.params.account.UserID);
+    const [accAge, setaccAge] = useState(props.route.params.account.UserAge);
     const [accPass, setaccPass] = useState(props.route.params.account.userPassword);
     const [accgender, setaccgender] = useState(props.route.params.account.gender);
     const [accLocation, setaccLocation] = useState(props.route.params.account.userlocation);
@@ -52,7 +52,7 @@ const AccountEditScreen = (props) => {
         let neweditAccounts = JSON.parse(JSON.stringify(account));
         //Replace the current details with new edit detail
         neweditAccounts.username = accUsername;
-        neweditAccounts.UserID = accID;
+        neweditAccounts.UserAge = accAge;
         neweditAccounts.userPassword = accPass;
         neweditAccounts.gender = accgender;
         neweditAccounts.userlocation = accLocation;
@@ -67,7 +67,7 @@ const AccountEditScreen = (props) => {
     const dischardChangeHandler = () => {
         //Reset the account detail to original detail
         setaccUsername(account.username);
-        setaccID(account.UserID);
+        setaccAge(account.UserAge);
         setaccPass(account.userPassword);
         setaccgender(account.gender);
         setaccLocation(account.userlocation);
@@ -135,9 +135,9 @@ const AccountEditScreen = (props) => {
 
                 <TextInput style={styles.inputs}
 
-                    placeholder="ID"
-                    onChangeText={text => setaccID(text)}
-                    value={accID}
+                    placeholder="Age"
+                    onChangeText={text => setaccAge(text)}
+                    value={accAge}
                     isBodyEditable={() => setIsBodyEditable(true)}
                 />
 

@@ -8,7 +8,7 @@ const Account = (props) => {
                 <Text style={styles.usernameText}>{props.username} </Text>
                 </View>
                 <View style={styles.textBody}>
-                 <Text style={styles.IDText}>{props.UserID} </Text>
+                 <Text style={styles.AgeText}>{props.UserAge} </Text>
                  </View>
                  
                 <View style={styles.textBody}>
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
         color:'#BFBFBF',
         
      },
-     IDText: {
+     AgeText: {
         marginBottom:-100,
         marginTop:-10,
          marginLeft: 40,

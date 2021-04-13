@@ -3,7 +3,7 @@
         {
             "account_id":"1",
             "username": "Ali",
-            "UserID": "1111",
+            "UserAge": "20",
             "userPassword": "12345",
             "gender": "Male",
             "userlocation": "Kuala Lumpur"

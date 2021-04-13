@@ -83,7 +83,7 @@ const AccountScreen = (props) => {
                             </View>
                             <View style={styles.inputContainer}>
                                 <Account
-                                    UserID={account.UserID}
+                                    UserAge={account.UserAge}
                                 />
                             </View>
 
