@@ -29,20 +29,24 @@ const ChatBotScreen = (props) => {
     const [mood, setMood] = useState(2)
     const [journal, setJournal] = useState([])
     const [continueShare, setContinueShare] = useState(false)
-
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
+
         sendMessageAPI("Hi", false)
             .then(data => {
                 setChatHistory([
                     ...chatHistory,
-                    { isOwnMessage: false, message: data.message[0].text.text[0] },
+                    { isOwnMessage: false, message: data.message },
                 ])
             })
     }, [])
 
-    const fetchmsg = () => {
+    const messageHandler = (msg) => {
+        setInputMessage(msg)
+    }
+
+    const showMessage = () => {
         if (inputMessage == undefined || inputMessage == "") {
             Alert.alert(
                 'Invalid message!',
@@ -57,99 +61,105 @@ const ChatBotScreen = (props) => {
         } else {
             chatHistory.push({ isOwnMessage: true, message: inputMessage })
 
-            console.log("******************************************************************")
-            console.log("Input :    " + inputMessage)
-
-            let moodMessage = "";
+            let dialogflowMessage = "";
             let isEvent = false;
 
             if (isSaveJournalNext) {
                 isEvent = true
                 setJournal([...journal, inputMessage])
+
                 if (mood == -1) {
                     if (continueShare) {
-                        moodMessage = CHATBOT_ACTIONTYPE.NEGATIVE_SHARE_YES_CONTINUE_SHARE_YES;
+                        dialogflowMessage = CHATBOT_ACTIONTYPE.NEGATIVE_SHARE_YES_CONTINUE_SHARE_YES;
                         setContinueShare(false)
                     } else {
-                        moodMessage = CHATBOT_ACTIONTYPE.NEGATIVE_SHARE_YES;
+                        dialogflowMessage = CHATBOT_ACTIONTYPE.NEGATIVE_SHARE_YES;
                         setContinueShare(true)
                     }
                 } else if (mood == 0) {
-                    moodMessage = CHATBOT_ACTIONTYPE.NEUTRAL_NO_JOURNAL_YES;
+                    dialogflowMessage = CHATBOT_ACTIONTYPE.NEUTRAL_NO_JOURNAL_YES;
                 } else if (mood == 1) {
-                    moodMessage = CHATBOT_ACTIONTYPE.POSITIVE_SHARE_YES;
+                    dialogflowMessage = CHATBOT_ACTIONTYPE.POSITIVE_SHARE_YES;
                 }
                 setIsSaveJournalNext(false)
             } else {
-                moodMessage = inputMessage
+                dialogflowMessage = inputMessage
             }
 
             if (isSaveToDB) {
                 let currentDate = new Date().toDateString()
-                //Call api
+
+                //Call API
                 setIsLoading(true);
                 addJournalAPI(props.loginReducer.userId, currentDate, journal, mood)
                     .then(data => {
                         console.log("Journal added successfully!");
-                        onSaveToJournal(data);
+                        props.onSaveToJournal(data);
                         setIsLoading(false);
                     })
-                console.log("Things save to DB ::")
+                console.log("Saving to MongoDB")
                 console.log("Mood : " + mood)
                 console.log("Journal content : " + journal)
+
+                setMood(2)
+                setJournal([])
                 setIsSaveToDB(false)
             }
 
             setIsLoading(true);
-            sendMessageAPI(moodMessage, isEvent)
+
+            sendMessageAPI(dialogflowMessage, isEvent)
                 .then(data => {
 
-                    if (data.isSaveJournal) {
+                    if (data.intent.includes("Negative")) {
+                        setMood(-1)
+                    } else if (data.intent.includes("Neutral")) {
+                        setMood(0)
+                    } else if (data.intent.includes("Positive")) {
+                        setMood(1)
+                    }
+
+                    if (data.intent === "Negative-Share(Yes)" ||
+                        data.intent === "Negative-Share(Yes)-ContinueShare(Yes)" ||
+                        data.intent === "Neutral(No)-Journal(Yes)" ||
+                        data.intent === "Positive-Share(Yes)"
+                    ) {
                         setIsSaveJournalNext(true)
                     }
 
-                    if (data.isSaveToDB) {
+                    if (data.intent === "Negative-Share(Yes)-ContinueShare(Yes)-Journal(Yes)-End" ||
+                        data.intent === "Negative-Share(Yes)-ContinueShare(No)-Journal(Yes)-End" ||
+                        data.intent === "Neutral(No)-Journal(Yes)-End" ||
+                        data.intent === "Positive-Share(Yes)-Journal(Yes)"
+                    ) {
                         setIsSaveToDB(true)
                     }
 
-                    setMood(data.mood)
-
                     setChatHistory([
                         ...chatHistory,
-                        { isOwnMessage: false, message: data.message[0].text.text[0] },
+                        { isOwnMessage: false, message: data.message },
                     ])
 
-                    console.log("Output : " + data.message[0].text.text[0])
+                    console.log("******************************************************************")
+                    console.log("Input :    " + inputMessage)
+                    console.log("Output : " + data.message)
+
                     setIsLoading(false);
+
+                }).catch(err => {
+                    console.log("Error!")
                 });
-            setInputMessage("");
+
+            setInputMessage('');
         }
-    }
-
-    // const fetchmsg = async e => {
-    //     const response = await fetch('/send-msg', {
-    //       method: 'POST',
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //       },
-    //       body: JSON.stringify({ 
-    //           "text": `${inputMessage}`
-    //         }),
-    //     });
-    //     const body = await response.text();
-
-    //     chatHistory.push({ isOwnMessage: false, message: response })
-    // };
-
-    const MessageHandler = (msg) => {
-        setInputMessage(msg)
     }
 
     return (
         <View behavior="padding" style={styles.container}>
-            <Spinner
+            {/* <Spinner
                 visible={isLoading}
-            />
+            /> */}
+
 
             <LinearGradient colors={['#2974FA', '#38ABFD', '#43D4FF']} style={styles.backgroundColour}>
                 <ScrollView ref={scrollViewRef}
@@ -158,13 +168,16 @@ const ChatBotScreen = (props) => {
                 </ScrollView>
             </LinearGradient>
 
-            <View style={styles.messageBoxContainer}>
-                <TextInput style={styles.messageBox} value={inputMessage} onChangeText={MessageHandler} />
 
-                <TouchableOpacity onPress={() => { fetchmsg() }} style={styles.sendContainer}>
+            <View style={styles.messageBoxContainer}>
+
+                <TextInput style={styles.messageBox} value={inputMessage} onChangeText={messageHandler} />
+
+                <TouchableOpacity onPress={() => { showMessage() }} style={styles.sendContainer}>
                     <Feather name="send" size={35} color="blue" />
                 </TouchableOpacity>
             </View>
+
         </View >
     )
 }
