@@ -189,6 +189,7 @@ const styles = StyleSheet.create({
         top: 0,
         marginTop: "5%",
         width: "100%",
+        height: "20%"
     },
     searchBarOuter: {
         backgroundColor: "#87cefa",

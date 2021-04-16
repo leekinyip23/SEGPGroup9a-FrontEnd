@@ -83,15 +83,17 @@ const ChatBotScreen = (props) => {
             } else {
                 moodMessage = inputMessage
             }
-
+            console.log("Before ran!", isSaveToDB)
             if (isSaveToDB) {
+                console.log("After ran!")
                 let currentDate = new Date().toDateString()
                 //Call api
                 setIsLoading(true);
+                
                 addJournalAPI(props.loginReducer.userId, currentDate, journal, mood)
                     .then(data => {
                         console.log("Journal added successfully!");
-                        onSaveToJournal(data);
+                        props.onSaveToJournal(data);
                         setIsLoading(false);
                     })
                 console.log("Things save to DB ::")
