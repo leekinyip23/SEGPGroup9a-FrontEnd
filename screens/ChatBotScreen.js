@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { View, StyleSheet, ScrollView, _ScrollView, Alert } from 'react-native'
+import { View, StyleSheet, ScrollView, _ScrollView, Alert, Platform } from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import MessageBubble from '../components/UI/MessageBubble'
 import { Feather } from '@expo/vector-icons';
@@ -86,26 +86,6 @@ const ChatBotScreen = (props) => {
                 dialogflowMessage = inputMessage
             }
 
-            if (isSaveToDB) {
-                let currentDate = new Date().toDateString()
-
-                //Call API
-                setIsLoading(true);
-                addJournalAPI(props.loginReducer.userId, currentDate, journal, mood)
-                    .then(data => {
-                        console.log("Journal added successfully!");
-                        props.onSaveToJournal(data);
-                        setIsLoading(false);
-                    })
-                console.log("Saving to MongoDB")
-                console.log("Mood : " + mood)
-                console.log("Journal content : " + journal)
-
-                setMood(2)
-                setJournal([])
-                setIsSaveToDB(false)
-            }
-
             setIsLoading(true);
 
             sendMessageAPI(dialogflowMessage, isEvent)
@@ -133,6 +113,28 @@ const ChatBotScreen = (props) => {
                         data.intent === "Positive-Share(Yes)-Journal(Yes)"
                     ) {
                         setIsSaveToDB(true)
+                        setIsSaveToDB((state) => {
+                            if (state) {
+                                let currentDate = new Date().toDateString()
+
+                                //Call API
+                                setIsLoading(true);
+                                addJournalAPI(props.loginReducer.userId, currentDate, journal, mood)
+                                    .then(data => {
+                                        console.log("Journal added successfully!");
+                                        props.onSaveToJournal(data);
+                                        setIsLoading(false);
+                                    })
+                                console.log("Saving to MongoDB")
+                                console.log("Mood : " + mood)
+                                console.log("Journal content : " + journal)
+
+                                setMood(2)
+                                setJournal([])
+                                setIsSaveToDB(false)
+                            }
+                            return state;
+                        });
                     }
 
                     setChatHistory([
@@ -149,9 +151,8 @@ const ChatBotScreen = (props) => {
                 }).catch(err => {
                     console.log("Error!")
                 });
-
-            setInputMessage('');
         }
+        setInputMessage('')
     }
 
     return (
@@ -186,7 +187,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#87cefa',
-        justifyContent: 'flex-end',
+        paddingTop: Platform.OS === 'android' ? 25 : 0
     },
 
     bubbleContainer: {
