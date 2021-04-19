@@ -13,18 +13,8 @@ const DATA = require("../../dummy_data/dummy_profile_data.json");
 
 
 const AccountScreen = (props) => {
-    const [editAccount, seteditAccounts] = useState(DATA.editAccount);
+    const [editAccount, seteditAccounts] = useState(DATA.editAccount);    
     //For when API is avaible
-
-    // useEffect(() => {
-    //     fetch("../dummy_data/dummy_data.json")
-    //     .then(response => {
-    //         return response.json();
-    //     })
-    //     .then(data => {
-    //         setJournalData(journalData);
-    //     })
-    // }, [])
 
     useEffect(() => {
         if(props.loginReducer) {
@@ -69,22 +59,7 @@ const AccountScreen = (props) => {
                         <View>
                             <Text style={styles.Text}>Profile</Text>
 
-                            {/* <Avatar
-
-                                size="xlarge"
-                                title="USER"
-                                titleStyle={{ fontSize: 48 }}
-                                onPress={() => console.log("Work!")}
-                                activeOpacity={0.7}
-                                containerStyle={{ marginTop: -30, marginBottom: 20, marginLeft: 80 }}
-                                source={{
-                                    uri:
-                                        'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-                                }}
-                                onAccessoryPress={() => Alert.alert("change avatar")}
-                                rounded
-                            >
-                            </Avatar> */}
+                     
                             <TouchableOpacity onPress={() => { console.log("Work!") }} style={styles.avatarContainer} >
                                 <Fontisto name={account.gender.toLowerCase()} size={150} color="black" alignItems="center" />
                             </TouchableOpacity>

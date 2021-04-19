@@ -8,14 +8,14 @@ const Account = (props) => {
                 <Text style={styles.usernameText}>{props.username} </Text>
                 </View>
                 <View style={styles.textBody}>
-                 <Text style={styles.AgeText}>{props.UserAge} </Text>
+                 <Text style={styles.AgeText}>{props.age} </Text>
                  </View>
                  
                 <View style={styles.textBody}>
                  <Text style={styles.GenderText}>{props.gender} </Text>
                  </View>
                 <View style={styles.textBody}>
-                 <Text style={styles.locationText}>{props.userlocation} </Text>
+                 <Text style={styles.locationText}>{props.location} </Text>
                  </View>
             </View>
         )

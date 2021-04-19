@@ -14,7 +14,7 @@ export default (state = initialState, action) => {
         case ACTION_TYPES.UPDATE_EDIT:
             let neweditAccount = JSON.parse(JSON.stringify(state.editAccount))
             neweditAccount.map((account, index) => {
-                if(account.account_id === action.neweditAccountEntryData.account_id) {
+                if(account.userId === action.neweditAccountEntryData.userId) {
                     neweditAccount[index] = action.neweditAccountEntryData;
                 }
                 return null;

@@ -1,25 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, TextInput, Keyboard, TouchableOpacity } from 'react-native'
+import { View, StyleSheet, TextInput, Keyboard, TouchableOpacity,TouchableWithoutFeedback, Alert } from 'react-native'
 import { Picker } from '@react-native-community/picker';
 import { connect } from 'react-redux';
 import * as ACTION_TYPES from '../../service/redux/action_types/account';
-import { Avatar, Accessory } from "react-native-elements";
 import AccEditButton from '../../components/AccountScreen/AccEditButton';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { Fontisto } from '@expo/vector-icons';
+import { updateAccountAPI } from '../../service/api/account';
 
 const AccountEditScreen = (props) => {
     const [account, setAccount] = useState(props.route.params.account);
-    const [accUsername, setaccUsername] = useState(props.route.params.account.username);
-    const [accAge, setaccAge] = useState(props.route.params.account.UserAge);
-    const [accPass, setaccPass] = useState(props.route.params.account.userPassword);
-    const [accgender, setaccgender] = useState(props.route.params.account.gender);
-    const [accLocation, setaccLocation] = useState(props.route.params.account.userlocation);
+    const [username, setaccUsername] = useState(props.route.params.account.username);
+    const [age, setaccAge] = useState(props.route.params.account.age);
+    const [password, setaccPass] = useState(props.route.params.account.password);
+    const [gender, setaccgender] = useState(props.route.params.account.gender);
+    const [location, setaccLocation] = useState(props.route.params.account.location);
     const [isBodyEditable, setIsBodyEditable] = useState(false);
     const [isKeyboardVisible, setKeyboardVisible] = useState(false);
     const [hidePass, setHidePass] = useState(true);
     const [showGender, setShowGender] = useState(props.route.params.account.gender);
 
+  // const gender = props.route.params.account.gender;
 
     //Add keyboard listener
     useEffect(() => {
@@ -44,33 +45,60 @@ const AccountEditScreen = (props) => {
         };
     }, []);
 
-    const gender = props.route.params.account.gender;
+
 
     //Handling save changes
     const saveChangeHandler = () => {
         //Copy the current account detail
         let neweditAccounts = JSON.parse(JSON.stringify(account));
         //Replace the current details with new edit detail
-        neweditAccounts.username = accUsername;
-        neweditAccounts.UserAge = accAge;
-        neweditAccounts.userPassword = accPass;
-        neweditAccounts.gender = accgender;
-        neweditAccounts.userlocation = accLocation;
+        neweditAccounts.username = username;
+        neweditAccounts.age = age;
+        neweditAccounts.password = password;
+        neweditAccounts.gender = gender;
+        neweditAccounts.location = location;
         //Update state and redux, then set to not editable
         setAccount(neweditAccounts);
-        props.onUpdateAccount(neweditAccounts);
-        setIsBodyEditable(false);
-        props.navigation.navigate("AccountOverview");
+     
+     props.navigation.navigate("AccountOverview");
+     
+        updateAccountAPI(neweditAccounts.username, neweditAccounts.age , neweditAccounts.password, neweditAccounts.gender,neweditAccounts.location) 
+            .then(reply => {
+              
+                if(reply.n > 0) {
+                    console.log("Account Updated Successfully!")
+                    Alert.alert(
+                        "Account Updated Successfully!",
+                        "Account has been successfully updated!",
+                        [
+                            {
+                                text: "Ok",
+                                onPress: () => {},
+                                style: "default"
+                            }
+                        ],
+                        {
+                            cancelable: true,
+                            onDismiss: () => console.log("Update dismissed")
+                        }
+                    )
+                    props.onUpdateAccount(neweditAccounts);
+                    setIsBodyEditable(false);
+                } else{
+                    console.log("Account Update Fail!")
+                }
+            })
+
     }
 
     //Handle when discard change is pressed
     const dischardChangeHandler = () => {
         //Reset the account detail to original detail
         setaccUsername(account.username);
-        setaccAge(account.UserAge);
-        setaccPass(account.userPassword);
+        setaccAge(account.age);
+        setaccPass(account.password);
         setaccgender(account.gender);
-        setaccLocation(account.userlocation);
+        setaccLocation(account.location);
         //Set editable to false
         setIsBodyEditable(false);
 
@@ -80,34 +108,15 @@ const AccountEditScreen = (props) => {
 
 
     return (
+        <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss()}}>
         <View style={styles.container}>
+    
 
             <TouchableOpacity onPress={() => { console.log(props.route.params.account.gender) }} style={styles.avatarContainer} >
                 <Fontisto name={showGender.toLowerCase()} size={150} color="black" alignItems="center" />
             </TouchableOpacity>
 
-            {/* <Avatar
-    
-      size="xlarge"
-      title="USER"
-      titleStyle={{fontSize:48}}
-      onPress={() => console.log("Work!")}
-      activeOpacity={0.7}
-      containerStyle={{ marginTop: 10,marginBottom:20}}
-      source={{
-        
-        uri:
-          'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-}}
-      onAccessoryPress={() => Alert.alert("change avatar")}
-      rounded
-  > 
  
- <Accessory
- 
- />
-</Avatar> */}
-
 
 
 
@@ -118,7 +127,7 @@ const AccountEditScreen = (props) => {
                 <TextInput style={styles.inputs}
                     placeholder="Username"
                     onChangeText={text => setaccUsername(text)}
-                    value={accUsername}
+                    value={username}
                     isBodyEditable={() => setIsBodyEditable(true)}
                 />
 
@@ -137,7 +146,7 @@ const AccountEditScreen = (props) => {
 
                     placeholder="Age"
                     onChangeText={text => setaccAge(text)}
-                    value={accAge}
+                    value={age}
                     isBodyEditable={() => setIsBodyEditable(true)}
                 />
 
@@ -153,7 +162,7 @@ const AccountEditScreen = (props) => {
                     onChangeText={text => setaccPass(text)}
                     text={/\s+/g, ''}
                     secureTextEntry={hidePass ? true : false}
-                    value={accPass}
+                    value={password}
                     isBodyEditable={() => setIsBodyEditable(true)}
                 />
 
@@ -170,10 +179,10 @@ const AccountEditScreen = (props) => {
 
                 <Picker
                     placeholder="Gender"
-                    selectedValue={accgender}
+                    selectedValue={gender}
                     style={styles.inputs}
                     isBodyEditable={() => setIsBodyEditable(true)}
-                    onValueChange={(accgender, _genderIndex) => { setaccgender(accgender); setShowGender(accgender) }}
+                    onValueChange={(gender, _genderIndex) => { setaccgender(gender); setShowGender(gender) }}
                     mode="dialog">
                     <Picker.Item value='' label='Gender' />
                     <Picker.Item label="Male" value="Male" />
@@ -191,10 +200,10 @@ const AccountEditScreen = (props) => {
 
                 <Picker
                     placeholder="Location"
-                    selectedValue={accLocation}
+                    selectedValue={location}
                     style={styles.inputs}
                     isBodyEditable={() => setIsBodyEditable(true)}
-                    onValueChange={(accLocation, _locationIndex) => setaccLocation(accLocation)}
+                    onValueChange={(location, _locationIndex) => setaccLocation(location)}
                     mode="dropdown">
                     <Picker.Item value='' label='Location' />
                     <Picker.Item label="Johor" value="Johor" />
@@ -246,7 +255,7 @@ const AccountEditScreen = (props) => {
 
 
         </View >
-
+        </TouchableWithoutFeedback>
     )
 }
 
