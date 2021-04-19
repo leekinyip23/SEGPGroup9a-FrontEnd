@@ -1,12 +1,12 @@
 {
     "editAccount": [
         {
-            "account_id":"1",
-            "username": "Ali",
-            "UserAge": "20",
-            "userPassword": "12345",
+            "userId":"_",
+            "username": "_",
+            "age": "_",
+            "password": "_",
             "gender": "Male",
-            "userlocation": "Kuala Lumpur"
+            "location": "_"
         }
     ]
 }

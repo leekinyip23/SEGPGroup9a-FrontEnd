@@ -33,7 +33,7 @@ const LoginScreen = (props) => {
         .then((userInfo) => {
             setIsLoading(false);
             if(userInfo.username && userInfo._id) {
-                props.onLoginClick(userId, userPassword, userInfo._id);
+                props.onLoginClick(userId, userPassword, userInfo._id, userInfo.nickname,userInfo.age, userInfo.gender, userInfo.location);
                 props.navigation.navigate("App")
             } else {
                 Alert.alert(
@@ -172,11 +172,15 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
     return {
-        onLoginClick: (newName, newPassword, newUserId) => dispatch({
+        onLoginClick: (newName, newPassword, newUserId, newNickname, newAge, newGender, newLocation) => dispatch({
             type: LOGIN_ACTION_TYPES.LOGIN,
             name: newName,
             password: newPassword,
             userId: newUserId,
+            nickname: newNickname,
+            age: newAge,
+            gender: newGender,
+            location: newLocation,
         }),
         dispatch,
     }

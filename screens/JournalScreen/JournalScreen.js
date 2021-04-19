@@ -182,6 +182,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         backgroundColor: '#87cefa',
+        paddingTop: 25,
     },
     searchBarContainer: {
         position: "absolute",
@@ -215,7 +216,7 @@ const styles = StyleSheet.create({
     },  
     scrollView: {
         marginTop: "0%",
-        paddingTop: "20%"
+        paddingTop: "15%"
     },
     itemContainer: {
         flex: 1,

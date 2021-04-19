@@ -5,6 +5,8 @@ import { Fontisto } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import * as ACTION_TYPES from '../../service/redux/action_types/account';
 
+import { loginUserAPI, registerUserAPI } from '../../service/api/login';
+
 import Account from '../../components/AccountScreen/Account';
 
 const DATA = require("../../dummy_data/dummy_profile_data.json");
@@ -25,7 +27,20 @@ const AccountScreen = (props) => {
     // }, [])
 
     useEffect(() => {
-        props.onSaveEdit(editAccount)
+        if(props.loginReducer) {
+            const newUserObj = [{
+                userId: props.loginReducer.userId,
+                username: props.loginReducer.nickname,
+                age: props.loginReducer.age,
+                password: props.loginReducer.password,
+                gender: (props.loginReducer.gender === "Male" || props.loginReducer.gender === "Female") ?  props.loginReducer.gender : "Male",
+                location: props.loginReducer.location
+            }]
+            console.log(newUserObj)
+            props.onSaveEdit(newUserObj)
+            seteditAccounts(newUserObj)
+        }
+        
     }, [])
 
     useEffect(() => {
@@ -47,8 +62,7 @@ const AccountScreen = (props) => {
                 return (
 
                     <View
-
-                        key={account.account_id}
+                        key={account.userId}
                         style={styles.container}
                     >
 
@@ -77,13 +91,12 @@ const AccountScreen = (props) => {
 
                             <View style={styles.inputContainer}>
                                 <Account
-
                                     username={account.username}
                                 />
                             </View>
                             <View style={styles.inputContainer}>
                                 <Account
-                                    UserAge={account.UserAge}
+                                    UserAge={account.age}
                                 />
                             </View>
 
@@ -94,7 +107,7 @@ const AccountScreen = (props) => {
                             </View>
                             <View style={styles.inputContainer}>
                                 <Account
-                                    userlocation={account.userlocation}
+                                    userlocation={account.location}
                                 />
                             </View>
 
@@ -197,6 +210,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => ({
     accountReducer: state.accountReducer,
+    loginReducer: state.loginReducer,
 });
 
 const mapDispatchToProps = dispatch => {
