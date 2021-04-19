@@ -91,13 +91,12 @@ const JournalScreen = (props) => {
                         onPress: () => {},
                         style: "default"
                     }
-                ]
-            ),
-            {
-                cancelable: true,
-                onDismiss: () => console.log("Delete dismissed")
-            }
-            
+                ],
+                {
+                    cancelable: true,
+                    onDismiss: () => console.log("Delete dismissed")
+                }
+            )
         })
     }
 

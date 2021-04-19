@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, TextInput, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, TextInput, Keyboard, TouchableWithoutFeedback, Alert } from 'react-native';
 
 import { connect } from 'react-redux';
 import * as ACTION_TYPES from '../../service/redux/action_types/journal';
@@ -55,6 +55,21 @@ const JournalDetailScreen = (props) => {
                 setIsLoading(false);
                 if(reply.n > 0) {
                     console.log("Journal Updated Successfully!")
+                    Alert.alert(
+                        "Journal Updated Successfully!",
+                        "Journal has been successfully updated!",
+                        [
+                            {
+                                text: "Ok",
+                                onPress: () => {},
+                                style: "default"
+                            }
+                        ],
+                        {
+                            cancelable: true,
+                            onDismiss: () => console.log("Update dismissed")
+                        }
+                    )
                     props.onUpdateJournal(newJournal);
                     setIsBodyEditable(false);
                 } else{
