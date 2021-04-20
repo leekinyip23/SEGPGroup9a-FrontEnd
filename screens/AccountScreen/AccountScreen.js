@@ -71,7 +71,7 @@ const AccountScreen = (props) => {
                             </View>
                             <View style={styles.inputContainer}>
                                 <Account
-                                    UserAge={account.age}
+                                    age={account.age}
                                 />
                             </View>
 
@@ -82,7 +82,7 @@ const AccountScreen = (props) => {
                             </View>
                             <View style={styles.inputContainer}>
                                 <Account
-                                    userlocation={account.location}
+                                    location={account.location}
                                 />
                             </View>
 

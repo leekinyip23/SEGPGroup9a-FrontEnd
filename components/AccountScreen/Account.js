@@ -5,17 +5,17 @@ const Account = (props) => {
         return (
             <View>
                 <View style={styles.textBody}>
-                <Text style={styles.usernameText}>{props.username} </Text>
+                <Text style={styles.ShownText}>{props.username} </Text>
                 </View>
                 <View style={styles.textBody}>
-                 <Text style={styles.AgeText}>{props.age} </Text>
+                 <Text style={styles.ShownText}>{props.age} </Text>
                  </View>
                  
                 <View style={styles.textBody}>
-                 <Text style={styles.GenderText}>{props.gender} </Text>
+                 <Text style={styles.ShownText}>{props.gender} </Text>
                  </View>
                 <View style={styles.textBody}>
-                 <Text style={styles.locationText}>{props.location} </Text>
+                 <Text style={styles.ShownText}>{props.location} </Text>
                  </View>
             </View>
         )
@@ -23,7 +23,7 @@ const Account = (props) => {
 
 const styles = StyleSheet.create({
   
-     usernameText: {
+     ShownText: {
        marginBottom:-100,
        marginTop:-10,
         marginLeft: 40,
@@ -33,43 +33,6 @@ const styles = StyleSheet.create({
         color:'#BFBFBF',
         
      },
-     AgeText: {
-        marginBottom:-100,
-        marginTop:-10,
-         marginLeft: 40,
-        borderBottomColor: '#FFFFFF',
-        flex: 1,
-        fontSize:18,
-        color:'#BFBFBF',
-    },
-    PassText: {
-        marginBottom:-100,
-       marginTop:-10,
-        marginLeft: 40,
-        borderBottomColor: '#FFFFFF',
-        flex: 1,
-        fontSize:18,
-        color:'#BFBFBF',
-    },
-    GenderText: {
-        marginBottom:-100,
-        marginTop:-10,
-         marginLeft: 40,
-        borderBottomColor: '#FFFFFF',
-        flex: 1,
-        fontSize:18,
-        color:'#BFBFBF',
-    },
-    locationText: {
-        marginBottom:-100,
-        marginTop:-10,
-         marginLeft: 40,
-        borderBottomColor: '#FFFFFF',
-        flex: 1,
-        fontSize:18,
-        color:'#BFBFBF',
-    }
-   
 })
 
 export default Account
