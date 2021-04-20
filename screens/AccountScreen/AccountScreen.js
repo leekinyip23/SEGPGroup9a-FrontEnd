@@ -23,7 +23,7 @@ const AccountScreen = (props) => {
                 username: props.loginReducer.nickname,
                 age: props.loginReducer.age,
                 password: props.loginReducer.password,
-                gender: (props.loginReducer.gender === "Male" || props.loginReducer.gender === "Female") ?  props.loginReducer.gender : "Male",
+                gender: props.loginReducer.gender,
                 location: props.loginReducer.location
             }]
             console.log(newUserObj)
@@ -61,7 +61,7 @@ const AccountScreen = (props) => {
 
                      
                             <TouchableOpacity onPress={() => { console.log("Work!") }} style={styles.avatarContainer} >
-                                <Fontisto name={account.gender.toLowerCase()} size={150} color="black" alignItems="center" />
+                                <Fontisto name={account.gender} size={150} color="black" alignItems="center" />
                             </TouchableOpacity>
 
                             <View style={styles.inputContainer}>

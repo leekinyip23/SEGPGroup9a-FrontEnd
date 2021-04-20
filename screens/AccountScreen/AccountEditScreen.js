@@ -9,9 +9,10 @@ import { Fontisto } from '@expo/vector-icons';
 import { updateAccountAPI } from '../../service/api/account';
 
 const AccountEditScreen = (props) => {
-    const [id, setId] = useState(props.route.params.account.id);
+    const [userId, setuserId] = useState(props.route.params.account.userId);
     const [account, setAccount] = useState(props.route.params.account);
     const [username, setaccUsername] = useState(props.route.params.account.username);
+    const [nickname, setaccNickname] = useState(props.route.params.account.nickname);
     const [age, setaccAge] = useState(props.route.params.account.age);
     const [password, setaccPass] = useState(props.route.params.account.password);
     const [gender, setaccgender] = useState(props.route.params.account.gender);
@@ -49,7 +50,9 @@ const AccountEditScreen = (props) => {
         //Copy the current account detail
         let neweditAccounts = JSON.parse(JSON.stringify(account));
         //Replace the current details with new edit detail
+        neweditAccounts.userId = userId;
         neweditAccounts.username = username;
+        neweditAccounts.nickname = nickname;
         neweditAccounts.age = age;
         neweditAccounts.password = password;
         neweditAccounts.gender = gender;
@@ -58,12 +61,14 @@ const AccountEditScreen = (props) => {
         setAccount(neweditAccounts);
 
         props.navigation.navigate("AccountOverview");
-
-        updateAccountAPI(id, neweditAccounts.nickname, neweditAccounts.age, neweditAccounts.gender, neweditAccounts.location, neweditAccounts.password)
+        console.log("Ruuning")
+        console.log(neweditAccounts.userId)
+        updateAccountAPI(neweditAccounts.userId, neweditAccounts.username,neweditAccounts.nickname, neweditAccounts.age, neweditAccounts.gender, neweditAccounts.location, neweditAccounts.password)
             .then(reply => {
-
+                console.log(reply)
                 if (reply.n > 0) {
                     console.log("Account Updated Successfully!")
+                    console.log(props.route.params.account)
                     Alert.alert(
                         "Account Updated Successfully!",
                         "Account has been successfully updated!",
@@ -84,14 +89,18 @@ const AccountEditScreen = (props) => {
                 } else {
                     console.log("Account Update Fail!")
                 }
-            })
+            }).catch(err => {
+                console.log("Error!")
+            });
 
     }
 
     //Handle when discard change is pressed
     const dischardChangeHandler = () => {
         //Reset the account detail to original detail
+        setuserId(account.userId);
         setaccUsername(account.username);
+        setaccNickname(account.nickname);
         setaccAge(account.age);
         setaccPass(account.password);
         setaccgender(account.gender);
@@ -110,7 +119,7 @@ const AccountEditScreen = (props) => {
 
 
                 <TouchableOpacity onPress={() => { console.log(props.route.params.account.gender) }} style={styles.avatarContainer} >
-                    <Fontisto name={showGender.toLowerCase()} size={150} color="black" alignItems="center" />
+                    {/* <Fontisto name={(showGender.toLowerCase())} size={150} color="black" alignItems="center" /> */}
                 </TouchableOpacity>
 
 
