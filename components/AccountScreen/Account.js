@@ -5,7 +5,7 @@ const Account = (props) => {
         return (
             <View>
                 <View style={styles.textBody}>
-                <Text style={styles.ShownText}>{props.username} </Text>
+                <Text style={styles.ShownText}>{props.nickname} </Text>
                 </View>
                 <View style={styles.textBody}>
                  <Text style={styles.ShownText}>{props.age} </Text>

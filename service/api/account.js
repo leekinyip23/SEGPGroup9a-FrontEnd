@@ -1,6 +1,6 @@
 import { USER_IP_ADDRESS, SERVER_PORT } from './apiConstant';
 
-export const updateAccountAPI = (id, username,nickname, age, gender, location, password) => {
+export const updateAccountAPI = (id, nickname, age, gender, location, password) => {
     return fetch(`http://${USER_IP_ADDRESS}:${SERVER_PORT}/user/updateId`, {
         method: 'POST',
         headers: {
@@ -8,7 +8,6 @@ export const updateAccountAPI = (id, username,nickname, age, gender, location, p
         },
         body: JSON.stringify({
             "_id": `${id}`,
-            "username": `${username}`,
             "nickname": `${nickname}`,
             "age": `${age}`,
             "gender": `${gender}`,

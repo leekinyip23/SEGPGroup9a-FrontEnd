@@ -11,7 +11,6 @@ import { updateAccountAPI } from '../../service/api/account';
 const AccountEditScreen = (props) => {
     const [userId, setuserId] = useState(props.route.params.account.userId);
     const [account, setAccount] = useState(props.route.params.account);
-    const [username, setaccUsername] = useState(props.route.params.account.username);
     const [nickname, setaccNickname] = useState(props.route.params.account.nickname);
     const [age, setaccAge] = useState(props.route.params.account.age);
     const [password, setaccPass] = useState(props.route.params.account.password);
@@ -51,7 +50,6 @@ const AccountEditScreen = (props) => {
         let neweditAccounts = JSON.parse(JSON.stringify(account));
         //Replace the current details with new edit detail
         neweditAccounts.userId = userId;
-        neweditAccounts.username = username;
         neweditAccounts.nickname = nickname;
         neweditAccounts.age = age;
         neweditAccounts.password = password;
@@ -63,7 +61,7 @@ const AccountEditScreen = (props) => {
         props.navigation.navigate("AccountOverview");
         console.log("Ruuning")
         console.log(neweditAccounts.userId)
-        updateAccountAPI(neweditAccounts.userId, neweditAccounts.username,neweditAccounts.nickname, neweditAccounts.age, neweditAccounts.gender, neweditAccounts.location, neweditAccounts.password)
+        updateAccountAPI(neweditAccounts.userId, neweditAccounts.nickname, neweditAccounts.age, neweditAccounts.gender, neweditAccounts.location, neweditAccounts.password)
             .then(reply => {
                 console.log(reply)
                 if (reply.n > 0) {
@@ -99,7 +97,6 @@ const AccountEditScreen = (props) => {
     const dischardChangeHandler = () => {
         //Reset the account detail to original detail
         setuserId(account.userId);
-        setaccUsername(account.username);
         setaccNickname(account.nickname);
         setaccAge(account.age);
         setaccPass(account.password);
@@ -133,7 +130,7 @@ const AccountEditScreen = (props) => {
                     <TextInput style={styles.inputs}
                         placeholder="Username"
                         onChangeText={text => setaccUsername(text)}
-                        value={username}
+                        value={nickname}
                         isBodyEditable={() => setIsBodyEditable(true)}
                     />
 
