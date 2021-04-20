@@ -119,7 +119,7 @@ const AccountEditScreen = (props) => {
 
 
                 <TouchableOpacity onPress={() => { console.log(props.route.params.account.gender) }} style={styles.avatarContainer} >
-                    {/* <Fontisto name={(showGender.toLowerCase())} size={150} color="black" alignItems="center" /> */}
+                    { <Fontisto name={(showGender.toLowerCase())} size={150} color="black" alignItems="center" /> }
                 </TouchableOpacity>
 
 
@@ -152,6 +152,8 @@ const AccountEditScreen = (props) => {
 
                         placeholder="Age"
                         onChangeText={text => setaccAge(text)}
+                        numeric
+                      keyboardType={'numeric'}
                         value={age}
                         isBodyEditable={() => setIsBodyEditable(true)}
                     />
@@ -191,9 +193,9 @@ const AccountEditScreen = (props) => {
                         onValueChange={(gender, _genderIndex) => { setaccgender(gender); setShowGender(gender) }}
                         mode="dialog">
                         <Picker.Item value='' label='Gender' />
-                        <Picker.Item label="Male" value="Male" />
+                        <Picker.Item label="male" value="male" />
 
-                        <Picker.Item label="Female" value="Female" />
+                        <Picker.Item label="female" value="female" />
 
 
 

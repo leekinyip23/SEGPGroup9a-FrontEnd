@@ -61,7 +61,7 @@ const AccountScreen = (props) => {
 
                      
                             <TouchableOpacity onPress={() => { console.log("Work!") }} style={styles.avatarContainer} >
-                                <Fontisto name={account.gender} size={150} color="black" alignItems="center" />
+                                <Fontisto name={account.gender.toLowerCase()} size={150} color="black" alignItems="center" />
                             </TouchableOpacity>
 
                             <View style={styles.inputContainer}>
