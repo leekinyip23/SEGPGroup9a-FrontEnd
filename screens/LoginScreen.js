@@ -55,6 +55,24 @@ const LoginScreen = (props) => {
             setUserId("");
             setUserPassword("");
         })
+        .catch((err) => {
+            setIsLoading(false);
+            Alert.alert(
+                `Server error`,
+                "Server time error, please try again later!",
+                [
+                    {
+                        text: "Ok",
+                        onPress: () => {},
+                        style: "default",
+                    }
+                ],
+                {
+                    cancelable: true,
+                    onDismiss: () => {}
+                }
+            )
+        })
     }
 
     return (
