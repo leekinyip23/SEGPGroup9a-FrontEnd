@@ -7,6 +7,7 @@ import AccEditButton from '../../components/AccountScreen/AccEditButton';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { Fontisto } from '@expo/vector-icons';
 import { updateAccountAPI } from '../../service/api/account';
+import NumericInput from 'react-native-numeric-input';
 
 const AccountEditScreen = (props) => {
     const [userId, setuserId] = useState(props.route.params.account.userId);
@@ -129,7 +130,7 @@ const AccountEditScreen = (props) => {
 
                     <TextInput style={styles.inputs}
                         placeholder="Username"
-                        onChangeText={text => setaccUsername(text)}
+                        onChangeText={text => setaccNickname(text)}
                         value={nickname}
                         isBodyEditable={() => setIsBodyEditable(true)}
                     />
@@ -145,39 +146,25 @@ const AccountEditScreen = (props) => {
                 <View style={styles.itemContainer}>
 
 
-                    <TextInput style={styles.inputs}
+                    {/* <TextInput style={styles.inputs}
 
                         placeholder="Age"
                         onChangeText={text => setaccAge(text)}
-                        numeric
-                      keyboardType={'numeric'}
+                     
                         value={age}
                         isBodyEditable={() => setIsBodyEditable(true)}
-                    />
+                    /> */
+                    <NumericInput 
+                    style={styles.inputs}
+                        placeholder="Age"
+                        onChange={value => setaccAge(value)}
+                        rounded 
+                        value={age}
+                        
+                    />}
 
 
 
-                </View>
-                <View style={styles.itemContainer}>
-
-
-                    <TextInput style={styles.inputs}
-
-                        placeholder="Password"
-                        onChangeText={text => setaccPass(text)}
-                        text={/\s+/g, ''}
-                        secureTextEntry={hidePass ? true : false}
-                        value={password}
-                        isBodyEditable={() => setIsBodyEditable(true)}
-                    />
-
-
-                    <Icon style={styles.iconContainer}
-                        name={hidePass ? 'eye-slash' : 'eye'}
-                        size={20}
-                        color="grey"
-                        onPress={() => setHidePass(!hidePass)}
-                    />
                 </View>
                 <View style={styles.itemContainer}>
 
