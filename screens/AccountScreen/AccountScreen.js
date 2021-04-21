@@ -20,7 +20,7 @@ const AccountScreen = (props) => {
         if(props.loginReducer) {
             const newUserObj = [{
                 userId: props.loginReducer.userId,
-                username: props.loginReducer.nickname,
+                nickname: props.loginReducer.nickname,
                 age: props.loginReducer.age,
                 password: props.loginReducer.password,
                 gender: props.loginReducer.gender,
@@ -66,7 +66,7 @@ const AccountScreen = (props) => {
 
                             <View style={styles.inputContainer}>
                                 <Account
-                                    username={account.nickname}
+                                    nickname={account.nickname}
                                 />
                             </View>
                             <View style={styles.inputContainer}>
