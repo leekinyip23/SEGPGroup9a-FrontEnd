@@ -176,7 +176,7 @@ const AccountEditScreen = (props) => {
                         isBodyEditable={() => setIsBodyEditable(true)}
                         onValueChange={(gender, _genderIndex) => { setaccgender(gender); setShowGender(gender) }}
                         mode="dialog">
-                        <Picker.Item value='' label='Gender' />
+                    
                         <Picker.Item label="male" value="male" />
 
                         <Picker.Item label="female" value="female" />
@@ -197,7 +197,7 @@ const AccountEditScreen = (props) => {
                         isBodyEditable={() => setIsBodyEditable(true)}
                         onValueChange={(location, _locationIndex) => setaccLocation(location)}
                         mode="dropdown">
-                        <Picker.Item value='' label='Location' />
+                     
                         <Picker.Item label="Johor" value="Johor" />
                         <Picker.Item label="Kedah" value="Kedah" />
                         <Picker.Item label="Kelantan" value="Kelantan" />
