@@ -7,6 +7,8 @@ import LoginScreen from '../screens/LoginScreen';
 import JournalStack from '../screens/JournalScreen/JournalStack';
 import ChatBotScreen from '../screens/ChatBotScreen';
 import AccountStack from '../screens/AccountScreen/AccountStack';
+
+
 const AppTab = createBottomTabNavigator();
 const AppNavigator = () => {
     return (
@@ -41,9 +43,8 @@ const AppNavigator = () => {
                 <AppTab.Screen 
                     name="Account"
                     component={AccountStack}
-                  
-                   
                 />
+                
                 
             </AppTab.Navigator>
 

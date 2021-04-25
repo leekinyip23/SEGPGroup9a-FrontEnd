@@ -59,7 +59,6 @@ const AccountEditScreen = (props) => {
         //Update state and redux, then set to not editable
         setAccount(neweditAccounts);
 
-        props.navigation.navigate("AccountOverview");
         console.log("Ruuning")
         console.log(neweditAccounts.userId)
         updateAccountAPI(neweditAccounts.userId, neweditAccounts.nickname, neweditAccounts.age, neweditAccounts.gender, neweditAccounts.location, neweditAccounts.password)
@@ -88,8 +87,10 @@ const AccountEditScreen = (props) => {
                 } else {
                     console.log("Account Update Fail!")
                 }
+                props.navigation.navigate("AccountOverview");
             }).catch(err => {
                 console.log("Error!")
+                props.navigation.navigate("AccountOverview");
             });
 
     }
